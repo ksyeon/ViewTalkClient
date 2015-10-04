@@ -13,7 +13,7 @@ namespace WakeUpMessangerClient.Modules
 {
     public abstract class TcpClient
     {
-        protected Socket clientSocket;
+        private Socket clientSocket;
         private string serverIP;
         private int serverPort;
 
@@ -29,7 +29,7 @@ namespace WakeUpMessangerClient.Modules
             Initialize();
         }
 
-        protected void Initialize()
+        private void Initialize()
         {
             try
             {
@@ -48,14 +48,16 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        protected void OnConnect(IAsyncResult ar)
+        private void OnConnect(IAsyncResult ar)
         {
             try
             {
                 clientSocket.EndConnect(ar);
 
-                MessageData sendMessage = GetConnectInfo();
+                MessageData sendMessage = GetConnectMessage();
                 SendMessage(sendMessage);
+
+                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
             }
             catch (Exception ex)
             {
@@ -63,13 +65,13 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        public void SendMessage(MessageData message)
+        protected void SendMessage(MessageData message)
         {
             try
             {
                 byte[] byteMessage = message.ToByteData();
 
-                /* [3] Connect */
+                /* [3] Send */
                 clientSocket.BeginSend(byteMessage, 0, byteMessage.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        protected void OnSend(IAsyncResult ar)
+        private void OnSend(IAsyncResult ar)
         {
             try
             {
@@ -90,7 +92,7 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        protected void OnReceive(IAsyncResult ar)
+        private void OnReceive(IAsyncResult ar)
         {
             try
             {
@@ -99,7 +101,7 @@ namespace WakeUpMessangerClient.Modules
                 MessageData receiveMessage = new MessageData(byteData);
                 CheckMessage(receiveMessage);
 
-                /* [4] Connect */
+                /* [4] Receive */
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 
             }
@@ -125,7 +127,7 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        public abstract MessageData GetConnectInfo();
+        public abstract MessageData GetConnectMessage();
 
         public abstract void CheckMessage(MessageData receiveMessage);
     }
