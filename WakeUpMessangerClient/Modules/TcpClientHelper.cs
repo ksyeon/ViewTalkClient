@@ -27,13 +27,25 @@ namespace WakeUpMessangerClient.Modules
             this.SetMessage = getMessage;
         }
 
-        public override MessageData GetConnectInfo()
+        public override MessageData GetConnectMessage()
         {
             MessageData sendMessage = new MessageData();
+
             sendMessage.Command = Command.Login;
             sendMessage.UserNumber = userNumber;
 
             return sendMessage;
+        }
+
+        public void SendChattingMessage(string chattingMessage)
+        {
+            MessageData sendMessage = new MessageData();
+
+            sendMessage.Command = Command.Message;
+            sendMessage.UserNumber = userNumber;
+            sendMessage.Message = chattingMessage;
+
+            SendMessage(sendMessage);
         }
 
         public override void CheckMessage(MessageData message)
