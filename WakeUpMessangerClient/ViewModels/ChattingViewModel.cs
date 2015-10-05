@@ -10,7 +10,6 @@ using System.ComponentModel;
 using WakeUpMessangerClient.Models;
 using WakeUpMessangerClient.Modules;
 using System.Windows.Input;
-using System.Threading;
 
 namespace WakeUpMessangerClient.ViewModels
 {
@@ -40,7 +39,7 @@ namespace WakeUpMessangerClient.ViewModels
             this.Participant = new ObservableCollection<int>();
             this.Chatting = new ObservableCollection<ChattingData>();
 
-            this.ChattingMessage = "";
+            this.ChattingMessage = string.Empty;
         }
 
         public void GetMessage(MessageData message)
@@ -66,23 +65,7 @@ namespace WakeUpMessangerClient.ViewModels
                     }
 
                     break;
-                case Command.Close:
-                    try
-                    {
-                        string notice = message.UserNumber + " 님이 퇴장하셨습니다.";
 
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            Chatting.Add(new ChattingData(0, notice));
-                            Participant.Remove(message.UserNumber);
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
-                    break;
 
                 case Command.Connect:
                     try
@@ -93,6 +76,24 @@ namespace WakeUpMessangerClient.ViewModels
                         {
                             Chatting.Add(new ChattingData(0, notice));
                             Participant.Add(message.UserNumber);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                    break;
+
+                case Command.Close:
+                    try
+                    {
+                        string notice = message.UserNumber + " 님이 퇴장하셨습니다.";
+
+                        App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Chatting.Add(new ChattingData(0, notice));
+                            Participant.Remove(message.UserNumber);
                         });
                     }
                     catch (Exception ex)
