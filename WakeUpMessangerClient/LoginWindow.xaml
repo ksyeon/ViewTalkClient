@@ -1,4 +1,4 @@
-﻿<Window x:Class="WakeUpMessangerClient.MainWindow"
+﻿<Window x:Class="WakeUpMessangerClient.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,15 +7,8 @@
         xmlns:views="clr-namespace:WakeUpMessangerClient.Views"
         mc:Ignorable="d"
         Title="WakeUp! Messanger" Width="350" Height="500">
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="500*" />
-        </Grid.RowDefinitions>
 
-        <views:ChattingView Grid.Row="0" Grid.Column="2" />
+    <Grid>
+        <views:LoginView />
     </Grid>
 </Window>

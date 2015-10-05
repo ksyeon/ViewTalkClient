@@ -10,8 +10,8 @@ namespace WakeUpMessangerClient.Models
     {
         Null,
         Login,
-        Close,
         Connect,
+        Close,
         Update,
         Message
     }

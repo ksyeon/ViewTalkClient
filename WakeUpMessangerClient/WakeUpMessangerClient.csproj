@@ -58,6 +58,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChattingWindow.xaml.cs">
+      <DependentUpon>ChattingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JoinWindow.xaml.cs">
+      <DependentUpon>JoinWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChattingData.cs" />
     <Compile Include="Models\MessageData.cs" />
     <Compile Include="Modules\JsonHelper.cs" />
@@ -69,9 +78,25 @@
     <Compile Include="Views\ChattingView.xaml.cs">
       <DependentUpon>ChattingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MessangerView.xaml.cs">
       <DependentUpon>MessangerView.xaml</DependentUpon>
     </Compile>
+    <Page Include="ChattingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JoinWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +110,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ChattingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

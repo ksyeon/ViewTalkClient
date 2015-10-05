@@ -17,13 +17,13 @@ using WakeUpMessangerClient.ViewModels;
 
 namespace WakeUpMessangerClient.Views
 {
-    public partial class MessangerView : UserControl
+    public partial class LoginView : UserControl
     {
-        public MessangerView()
+        public LoginView()
         {
             InitializeComponent();
 
-            DataContext = new MessangerViewModel();
+            DataContext = new LoginViewModel();
         }
     }
 }

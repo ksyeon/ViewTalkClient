@@ -10,20 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using WakeUpMessangerClient.ViewModels;
 
-namespace WakeUpMessangerClient.Views
+namespace WakeUpMessangerClient
 {
-    public partial class MessangerView : UserControl
+    public partial class ChattingWindow : Window
     {
-        public MessangerView()
+        public ChattingWindow()
         {
             InitializeComponent();
 
-            DataContext = new MessangerViewModel();
+            DataContext = new ChattingViewModel();
         }
     }
 }
