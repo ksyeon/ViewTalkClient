@@ -19,7 +19,7 @@ namespace WakeUpMessangerClient.ViewModels
         private TcpClientHelper tcpClient;
 
         public ObservableCollection<ChattingData> Chatting { get; set; }
-        public ObservableCollection<ulong> Participant { get; set; }
+        public ObservableCollection<int> Participant { get; set; }
 
         private string _chattingMessage;
         public string ChattingMessage
@@ -37,7 +37,7 @@ namespace WakeUpMessangerClient.ViewModels
         {
             this.tcpClient = new TcpClientHelper(1111, GetMessage);
 
-            this.Participant = new ObservableCollection<ulong>();
+            this.Participant = new ObservableCollection<int>();
             this.Chatting = new ObservableCollection<ChattingData>();
 
             this.ChattingMessage = "";
@@ -66,7 +66,7 @@ namespace WakeUpMessangerClient.ViewModels
                     }
 
                     break;
-                case Command.Logout:
+                case Command.Close:
                     try
                     {
                         string notice = message.UserNumber + " 님이 퇴장하셨습니다.";
@@ -83,6 +83,25 @@ namespace WakeUpMessangerClient.ViewModels
                     }
 
                     break;
+
+                case Command.Connect:
+                    try
+                    {
+                        string notice = message.UserNumber + " 님이 입장하셨습니다.";
+
+                        App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Chatting.Add(new ChattingData(0, notice));
+                            Participant.Add(message.UserNumber);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
+                    break;
+
                 case Command.Message:
                     try
                     {
@@ -97,6 +116,7 @@ namespace WakeUpMessangerClient.ViewModels
                     }
 
                     break;
+
                 case Command.Update:
 
                     break;

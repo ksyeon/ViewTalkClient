@@ -16,12 +16,12 @@ namespace WakeUpMessangerClient.Modules
         private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
-        private ulong userNumber;
+        private int userNumber;
         private MessageDelegate SetMessage;
 
         public delegate void MessageDelegate(MessageData message);
 
-        public TcpClientHelper(ulong userNumber, MessageDelegate getMessage) : base(ServerIP, ServerPort)
+        public TcpClientHelper(int userNumber, MessageDelegate getMessage) : base(ServerIP, ServerPort)
         {
             this.userNumber = userNumber;
             this.SetMessage = getMessage;
@@ -32,7 +32,8 @@ namespace WakeUpMessangerClient.Modules
             MessageData sendMessage = new MessageData();
 
             sendMessage.Command = Command.Login;
-            sendMessage.UserNumber = userNumber;
+            
+            // ID, Password Json 후 메시지에 저장
 
             return sendMessage;
         }
