@@ -10,6 +10,7 @@ using System.ComponentModel;
 using WakeUpMessangerClient.Models;
 using WakeUpMessangerClient.Modules;
 using System.Windows.Input;
+using System.Threading;
 
 namespace WakeUpMessangerClient.ViewModels
 {
@@ -17,8 +18,8 @@ namespace WakeUpMessangerClient.ViewModels
     {
         private TcpClientHelper tcpClient;
 
-        public ObservableCollection<ulong> Participant { get; set; }
         public ObservableCollection<ChattingData> Chatting { get; set; }
+        public ObservableCollection<ulong> Participant { get; set; }
 
         private string _chattingMessage;
         public string ChattingMessage
@@ -44,31 +45,58 @@ namespace WakeUpMessangerClient.ViewModels
 
         public void GetMessage(MessageData message)
         {
-            string notice = string.Empty;
+            Console.WriteLine(message.Command + " : " + message.Command);
 
             switch (message.Command)
             {
                 case Command.Login:
-                    Participant.Add(message.UserNumber);
+                    try
+                    {
+                        string notice = message.UserNumber + " 님이 입장하셨습니다.";
 
-                    notice = message.UserNumber + " 님이 입장하셨습니다.";
-                    Chatting.Add(new ChattingData(0, notice));
+                        App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Chatting.Add(new ChattingData(0, notice));
+                            Participant.Add(message.UserNumber);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
 
                     break;
-
                 case Command.Logout:
-                    Participant.Remove(message.UserNumber);
+                    try
+                    {
+                        string notice = message.UserNumber + " 님이 퇴장하셨습니다.";
 
-                    notice = message.UserNumber + " 님이 퇴장하셨습니다.";
-                    Chatting.Add(new ChattingData(0, notice));
+                        App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Chatting.Add(new ChattingData(0, notice));
+                            Participant.Remove(message.UserNumber);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
 
                     break;
-
                 case Command.Message:
-                    Chatting.Add(new ChattingData(message.UserNumber, message.Message));
+                    try
+                    {
+                        App.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            Chatting.Add(new ChattingData(1234, message.Message));
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
 
                     break;
-
                 case Command.Update:
 
                     break;
@@ -77,8 +105,8 @@ namespace WakeUpMessangerClient.ViewModels
 
         private void SendMessage()
         {
-            if(ChattingMessage.Length > 0)
-            { 
+            if (ChattingMessage.Length > 0)
+            {
                 Chatting.Add(new ChattingData(1234, ChattingMessage));
 
                 tcpClient.SendChattingMessage(ChattingMessage);
