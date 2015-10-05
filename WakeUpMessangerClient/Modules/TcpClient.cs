@@ -115,11 +115,8 @@ namespace WakeUpMessangerClient.Modules
         {
             try
             {
-                if (clientSocket != null)
-                {
-                    /* [5] Close */
-                    clientSocket.Close();
-                }
+                /* [5] Close */
+                clientSocket.Close();
             }
             catch (Exception ex)
             {
