@@ -7,37 +7,40 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="350">
 
-    <Grid Background="#FFFFEB33" >
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30*" />
-            <RowDefinition Height="145*" />
-            <RowDefinition Height="180*" />
-            <RowDefinition Height="145*" />
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="150*" />
+            <RowDefinition Height="150*" />
+            <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
+
+        <Image Source="/Resources/Login_Main.png" Width="128" Height="128" Grid.Row="1" Grid.Column="0"/>
 
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*" />
-                <ColumnDefinition Width="250*" />
-                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="85*" />
+                <ColumnDefinition Width="180*" />
+                <ColumnDefinition Width="85*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35*" />
-                <RowDefinition Height="35*" />
-                <RowDefinition Height="10*" />
-                <RowDefinition Height="35*" />
-                <RowDefinition Height="35*" />
-                <RowDefinition Height="30*" />
+                <RowDefinition Height="40*" />
+                <RowDefinition Height="40*" />
+                <RowDefinition Height="50*" />
+                <RowDefinition Height="20*" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" />
-            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" />
-            <Button Content="로그인" Grid.Row="3" Grid.Column="1" FontWeight="Bold" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
-            <Button Content="회원가입" Grid.Row="4" Grid.Column="1" FontWeight="Bold" Command="{Binding Path=ClickJoin}" />
-            <CheckBox Content="자동 로그인" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+            <TextBox BorderBrush="#FF2196F3" Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" MaxLength="12" Margin="0,5,0,5" VerticalContentAlignment="Center" />
+
+            <PasswordBox BorderBrush="#FF2196F3" Name="pwdPassword" Grid.Row="1" Grid.Column="1" MaxLength="12" Margin="0,5,0,5" VerticalContentAlignment="Center" />
+
+            <Button Background="#FF2196F3" Foreground="White" BorderThickness="0" Content="Join" Width="80" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,5" FontSize="16" FontWeight="Bold" Command="{Binding Path=ClickJoin}" />
+            <Button Background="#FF2196F3" Foreground="White" BorderThickness="0" Content="Login" Width="80" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="0,5,0,5" FontSize="16" FontWeight="Bold" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
+            
+            <CheckBox Content="자동 로그인" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  />
         </Grid>
     </Grid>
 </UserControl>
