@@ -26,10 +26,10 @@ namespace WakeUpMessangerClient.Modules
 
             this.byteData = new byte[1024];
 
-            Initialize();
+            ConnectSocket();
         }
 
-        private void Initialize()
+        public void ConnectSocket()
         {
             try
             {
@@ -53,9 +53,6 @@ namespace WakeUpMessangerClient.Modules
             try
             {
                 clientSocket.EndConnect(ar);
-
-                MessageData sendMessage = GetConnectMessage();
-                SendMessage(sendMessage);
 
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
             }
@@ -111,7 +108,7 @@ namespace WakeUpMessangerClient.Modules
             }
         }
 
-        protected void CloseSocket()
+        public void CloseSocket()
         {
             try
             {
@@ -123,8 +120,6 @@ namespace WakeUpMessangerClient.Modules
                 Console.WriteLine(ex.Message);
             }
         }
-
-        public abstract MessageData GetConnectMessage();
 
         public abstract void CheckMessage(MessageData receiveMessage);
     }
