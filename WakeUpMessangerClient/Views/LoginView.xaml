@@ -8,9 +8,6 @@
              d:DesignHeight="500" d:DesignWidth="350">
 
     <Grid Background="White">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="100*" />
             <RowDefinition Height="150*" />
@@ -18,9 +15,9 @@
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
 
-        <Image Source="/Resources/Login_Main.png" Width="128" Height="128" Grid.Row="1" Grid.Column="0"/>
+        <Image Source="/Resources/Login_Main.png" Width="128" Height="128" Grid.Row="1"/>
 
-        <Grid Grid.Row="2" Grid.Column="0">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="85*" />
                 <ColumnDefinition Width="180*" />
