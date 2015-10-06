@@ -8,10 +8,10 @@ namespace WakeUpMessangerClient.Models
 {
     class ChattingData
     {
-        public ulong UserNumber { get; set; }
+        public int UserNumber { get; set; }
         public string Message { get; set; }
 
-        public ChattingData(ulong userNumber, string message)
+        public ChattingData(int userNumber, string message)
         {
             this.UserNumber = userNumber;
             this.Message = message;
