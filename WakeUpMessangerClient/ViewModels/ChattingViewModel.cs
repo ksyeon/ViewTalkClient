@@ -15,8 +15,6 @@ namespace WakeUpMessangerClient.ViewModels
 {
     class ChattingViewModel : INotifyPropertyChanged
     {
-        private TcpClientHelper tcpClient;
-
         public ObservableCollection<ChattingData> Chatting { get; set; }
         public ObservableCollection<int> Participant { get; set; }
 
@@ -34,87 +32,48 @@ namespace WakeUpMessangerClient.ViewModels
 
         public ChattingViewModel()
         {
-            this.tcpClient = new TcpClientHelper(1111, GetMessage);
-
             this.Participant = new ObservableCollection<int>();
             this.Chatting = new ObservableCollection<ChattingData>();
 
             this.ChattingMessage = string.Empty;
+
+            App.TcpClient.ExecuteMessage = ExecuteMessage;
+            App.TcpClient.SendConnect();
         }
 
-        public void GetMessage(MessageData message)
+        public void ExecuteMessage(MessageData message)
         {
-            Console.WriteLine(message.Command + " : " + message.Command);
+            string notice = string.Empty;
 
             switch (message.Command)
             {
-                case Command.Login:
-                    try
-                    {
-                        string notice = message.UserNumber + " 님이 입장하셨습니다.";
-
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            Chatting.Add(new ChattingData(0, notice));
-                            Participant.Add(message.UserNumber);
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
-                    break;
-
-
                 case Command.Connect:
-                    try
-                    {
-                        string notice = message.UserNumber + " 님이 입장하셨습니다.";
+                    notice = message.Number + " 님이 입장하셨습니다.";
 
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            Chatting.Add(new ChattingData(0, notice));
-                            Participant.Add(message.UserNumber);
-                        });
-                    }
-                    catch (Exception ex)
+                    App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Console.WriteLine(ex.Message);
-                    }
+                        Chatting.Add(new ChattingData(0, notice));
+                        Participant.Add(message.Number);
+                    });
 
                     break;
 
                 case Command.Close:
-                    try
-                    {
-                        string notice = message.UserNumber + " 님이 퇴장하셨습니다.";
+                    notice = message.Number + " 님이 퇴장하셨습니다.";
 
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            Chatting.Add(new ChattingData(0, notice));
-                            Participant.Remove(message.UserNumber);
-                        });
-                    }
-                    catch (Exception ex)
+                    App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Console.WriteLine(ex.Message);
-                    }
+                        Chatting.Add(new ChattingData(0, notice));
+                        Participant.Remove(message.Number);
+                    });
 
                     break;
 
                 case Command.Message:
-                    try
+                    App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            Chatting.Add(new ChattingData(1234, message.Message));
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                        Chatting.Add(new ChattingData(1234, message.Message));
+                    });
 
                     break;
 
@@ -130,7 +89,7 @@ namespace WakeUpMessangerClient.ViewModels
             {
                 Chatting.Add(new ChattingData(1234, ChattingMessage));
 
-                tcpClient.SendChattingMessage(ChattingMessage);
+                App.TcpClient.SendChatting(ChattingMessage);
 
                 ChattingMessage = "";
             }

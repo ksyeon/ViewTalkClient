@@ -11,47 +11,57 @@ using WakeUpMessangerClient.Models;
 
 namespace WakeUpMessangerClient.Modules
 {
-    class TcpClientHelper : TcpClient
+    public class TcpClientHelper : TcpClient
     {
         private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
-        private int userNumber;
-        private MessageDelegate SetMessage;
+        public int UserNumber { get; set; }
 
         public delegate void MessageDelegate(MessageData message);
+        public MessageDelegate ExecuteMessage { get; set; }        
 
-        public TcpClientHelper(int userNumber, MessageDelegate getMessage) : base(ServerIP, ServerPort)
+        public TcpClientHelper() : base(ServerIP, ServerPort)
         {
-            this.userNumber = userNumber;
-            this.SetMessage = getMessage;
+
         }
 
-        public override MessageData GetConnectMessage()
+        public void SendLogin(string id, string password)
         {
-            MessageData sendMessage = new MessageData();
+            MessageData message = new MessageData();
 
-            sendMessage.Command = Command.Login;
-            
-            // ID, Password Json 후 메시지에 저장
+            JsonHelper json = new JsonHelper();
 
-            return sendMessage;
+            message.Command = Command.Login;
+            message.Message = json.GetLoginInfo(id, password);
+
+            SendMessage(message);
         }
 
-        public void SendChattingMessage(string chattingMessage)
+        public void SendConnect()
         {
-            MessageData sendMessage = new MessageData();
+            MessageData message = new MessageData();
 
-            sendMessage.Command = Command.Message;
-            sendMessage.UserNumber = userNumber;
-            sendMessage.Message = chattingMessage;
+            message.Command = Command.Connect;
+            message.Number = UserNumber;
 
-            SendMessage(sendMessage);
+            SendMessage(message);
+        }
+
+        public void SendChatting(string chatting)
+        {
+            MessageData message = new MessageData();
+
+            message.Command = Command.Message;
+            message.Number = UserNumber;
+            message.Message = chatting;
+
+            SendMessage(message);
         }
 
         public override void CheckMessage(MessageData message)
         {
-            SetMessage(message);
+            ExecuteMessage(message);
         }
     }
 }
