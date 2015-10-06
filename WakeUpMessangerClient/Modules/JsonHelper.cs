@@ -23,12 +23,12 @@ namespace WakeUpMessangerClient.Modules
 
         public string GetLoginInfo(string id, string password)
         {
-            JsonObjectCollection jsonObjectCollection = new JsonObjectCollection();
+            JsonObjectCollection result = new JsonObjectCollection();
 
-            jsonObjectCollection.Add(new JsonStringValue(JsonName.ID, id));
-            jsonObjectCollection.Add(new JsonStringValue(JsonName.Password, password));
+            result.Add(new JsonStringValue(JsonName.ID, id));
+            result.Add(new JsonStringValue(JsonName.Password, password));
 
-            return jsonObjectCollection.ToString();
+            return result.ToString();
         }
     }
 }
