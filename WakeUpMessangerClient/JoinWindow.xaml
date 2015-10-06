@@ -8,6 +8,6 @@
         Title="WakeUp! Messanger" Width="350" Height="500">
 
     <Grid>
-
+        <views:JoinView />
     </Grid>
 </Window>

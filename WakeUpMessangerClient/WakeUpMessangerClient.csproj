@@ -74,11 +74,15 @@
     <Compile Include="Modules\TcpClient.cs" />
     <Compile Include="Modules\TcpClientHelper.cs" />
     <Compile Include="ViewModels\ChattingViewModel.cs" />
+    <Compile Include="ViewModels\JoinViewModel.cs" />
     <Compile Include="ViewModels\MessangerViewModel.cs" />
     <Compile Include="Views\ChattingView.xaml.cs">
       <DependentUpon>ChattingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Views\JoinView.xaml.cs">
+      <DependentUpon>JoinView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -109,7 +113,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\ResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ChattingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JoinView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

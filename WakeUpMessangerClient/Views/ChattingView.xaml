@@ -7,34 +7,28 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="350">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="420*" />
             <RowDefinition Height="80*" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Chatting}" Grid.Row="0" Grid.Column="0" Margin="10,10,10,10" >
+        <ListView BorderBrush="{StaticResource ApplicationColor}" BorderThickness="2" ItemsSource="{Binding Chatting}" Grid.Row="0" Margin="10,10,10,10" >
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="User Number" Width="150" DisplayMemberBinding="{Binding UserNumber}"/>
-                    <GridViewColumn Header="Message" Width="150" DisplayMemberBinding="{Binding Message}"/>
+                    <GridViewColumn Header="User" Width="50" DisplayMemberBinding="{Binding UserNumber}"/>
+                    <GridViewColumn Header="Message" Width="270" DisplayMemberBinding="{Binding Message}"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <Grid Grid.Row="1" Grid.Column="0" >
+        <Grid Grid.Row="1" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="270*" />
                 <ColumnDefinition Width="80*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50*" />
-            </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding ChattingMessage}" Grid.Row="0" Grid.Column="0" Margin="10,0,0,10" />
-            <Button Content="전송" Grid.Row="0" Grid.Column="1" Margin="0,0,10,10" Command="{Binding Path=ClickSendMessage}" />
+            <TextBox Text="{Binding ChattingMessage}" Grid.Column="0" Style="{StaticResource ChattingTextBoxStyle}" />
+            <Button Content="전송" Grid.Column="1" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickSendMessage}" />
         </Grid>
     </Grid>
 </UserControl>
