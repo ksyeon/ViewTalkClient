@@ -9,13 +9,6 @@
         Title="WakeUp! Messanger" Width="350" Height="500">
     
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="500*" />
-        </Grid.RowDefinitions>
-
-        <views:ChattingView Grid.Row="0" Grid.Column="2" />
+        <views:MessangerView />
     </Grid>
 </Window>

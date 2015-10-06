@@ -150,7 +150,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Login.png" />
+    <Resource Include="Resources\Menu_Chatting.png" />
+    <Resource Include="Resources\Menu_Friend.png" />
+    <Resource Include="Resources\Menu_Setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Login_Main.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

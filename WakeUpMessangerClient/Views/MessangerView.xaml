@@ -5,8 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WakeUpMessangerClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="500" d:DesignWidth="350">
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions >
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="450*" />
+        </Grid.RowDefinitions>
+
+        <Grid Background="#FF2196F3" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70*" />
+                <ColumnDefinition Width="70*" />
+                <ColumnDefinition Width="70*" />
+                <ColumnDefinition Width="70*" />
+                <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="0">
+                <Image Source="/Resources/Menu_Friend.png" Margin="5,5,5,5" />
+            </Button>
+
+            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="1">
+                <Image Source="/Resources/Menu_Chatting.png" Margin="5,5,5,5" />
+            </Button>
+
+            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="4">
+                <Image Source="/Resources/Menu_Setting.png" Margin="5,5,5,5" />
+            </Button>
+        </Grid>
+
+        <local:ChattingView Grid.Row="1" />
     </Grid>
 </UserControl>
