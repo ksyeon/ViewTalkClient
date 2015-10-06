@@ -52,8 +52,8 @@ namespace WakeUpMessangerClient.ViewModels
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Chatting.Add(new ChattingData(0, notice));
                         Participant.Add(message.Number);
+                        Chatting.Add(new ChattingData(message.Number, notice));
                     });
 
                     break;
@@ -63,8 +63,8 @@ namespace WakeUpMessangerClient.ViewModels
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Chatting.Add(new ChattingData(0, notice));
                         Participant.Remove(message.Number);
+                        Chatting.Add(new ChattingData(message.Number, notice));
                     });
 
                     break;
