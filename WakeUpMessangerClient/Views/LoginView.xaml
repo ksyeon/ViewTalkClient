@@ -33,7 +33,7 @@
                 <RowDefinition Height="30*" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding ID}" Grid.Row="0" Grid.Column="1" />
+            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" />
             <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" />
             <Button Content="로그인" Grid.Row="3" Grid.Column="1" FontWeight="Bold" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
             <Button Content="회원가입" Grid.Row="4" Grid.Column="1" FontWeight="Bold" Command="{Binding Path=ClickJoin}" />
