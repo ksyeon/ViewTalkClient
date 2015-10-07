@@ -72,7 +72,7 @@ namespace WakeUpMessangerClient.ViewModels
                 case Command.Message:
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Chatting.Add(new ChattingData(1234, message.Message));
+                        Chatting.Add(new ChattingData(message.Number, message.Message));
                     });
 
                     break;
