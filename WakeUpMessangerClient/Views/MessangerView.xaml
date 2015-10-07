@@ -16,7 +16,7 @@
             <RowDefinition Height="450*" />
         </Grid.RowDefinitions>
 
-        <Grid Background="#FF2196F3" Grid.Row="0">
+        <Grid Background="{StaticResource ApplicationColor}" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="70*" />
                 <ColumnDefinition Width="70*" />
@@ -25,15 +25,15 @@
                 <ColumnDefinition Width="70*" />
             </Grid.ColumnDefinitions>
 
-            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="0">
+            <Button Background="{StaticResource ApplicationColor}" BorderThickness="0" Grid.Column="0">
                 <Image Source="/Resources/Menu_Friend.png" Margin="5,5,5,5" />
             </Button>
 
-            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="1">
+            <Button Background="{StaticResource ApplicationColor}" BorderThickness="0" Grid.Column="1">
                 <Image Source="/Resources/Menu_Chatting.png" Margin="5,5,5,5" />
             </Button>
 
-            <Button Background="#FF2196F3" BorderThickness="0" Grid.Column="4">
+            <Button Background="{StaticResource ApplicationColor}" BorderThickness="0" Grid.Column="4">
                 <Image Source="/Resources/Menu_Setting.png" Margin="5,5,5,5" />
             </Button>
         </Grid>
