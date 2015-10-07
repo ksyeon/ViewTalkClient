@@ -87,7 +87,7 @@ namespace WakeUpMessangerClient.ViewModels
         {
             if (ChattingMessage.Length > 0)
             {
-                Chatting.Add(new ChattingData(1234, ChattingMessage));
+                Chatting.Add(new ChattingData(App.TcpClient.UserNumber, ChattingMessage));
 
                 App.TcpClient.SendChatting(ChattingMessage);
 
