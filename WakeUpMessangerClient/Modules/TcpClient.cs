@@ -54,6 +54,7 @@ namespace WakeUpMessangerClient.Modules
             {
                 clientSocket.EndConnect(ar);
 
+                /* [4] Receive */
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
             }
             catch (Exception ex)
@@ -98,7 +99,6 @@ namespace WakeUpMessangerClient.Modules
                 MessageData receiveMessage = new MessageData(byteData);
                 CheckMessage(receiveMessage);
 
-                /* [4] Receive */
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 
             }
