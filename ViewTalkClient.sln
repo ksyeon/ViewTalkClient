@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WakeUpMessangerClient", "WakeUpMessangerClient\WakeUpMessangerClient.csproj", "{4A582D30-3B21-4B90-806D-06E00653AFDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewTalkClient", "ViewTalkClient\ViewTalkClient.csproj", "{4A582D30-3B21-4B90-806D-06E00653AFDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
