@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-using WakeUpMessangerClient.Models;
-using WakeUpMessangerClient.Modules;
+using ViewTalkClient.Models;
 using System.Windows.Input;
 
-namespace WakeUpMessangerClient.ViewModels
+namespace ViewTalkClient.ViewModels
 {
-    class ChattingViewModel : INotifyPropertyChanged
+    public class ChattingViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<ChattingData> Chatting { get; set; }
         public ObservableCollection<int> Participant { get; set; }

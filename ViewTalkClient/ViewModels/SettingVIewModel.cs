@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WakeUpMessangerClient.ViewModels
+namespace ViewTalkClient.ViewModels
 {
-    public class MessangerViewModel
+    public class SettingVIewModel
     {
     }
 }

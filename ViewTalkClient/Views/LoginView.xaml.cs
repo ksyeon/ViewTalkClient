@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using WakeUpMessangerClient.ViewModels;
+using ViewTalkClient.ViewModels;
 
-namespace WakeUpMessangerClient.Views
+namespace ViewTalkClient.Views
 {
     public partial class LoginView : UserControl
     {

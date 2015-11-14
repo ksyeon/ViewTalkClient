@@ -13,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using WakeUpMessangerClient.ViewModels;
-
-namespace WakeUpMessangerClient.Views
+namespace ViewTalkClient.Views
 {
-    public partial class MessangerView : UserControl
+    /// <summary>
+    /// Interaction logic for SettingView.xaml
+    /// </summary>
+    public partial class SettingView : UserControl
     {
-        public MessangerView()
+        public SettingView()
         {
             InitializeComponent();
-
-            DataContext = new MessangerViewModel();
         }
     }
 }

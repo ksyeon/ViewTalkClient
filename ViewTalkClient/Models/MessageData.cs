@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WakeUpMessangerClient.Models
+namespace ViewTalkClient.Models
 {
     public enum Command
     {

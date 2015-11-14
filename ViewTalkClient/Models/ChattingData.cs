@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WakeUpMessangerClient.Models
+namespace ViewTalkClient.Models
 {
-    class ChattingData
+    public class ChattingData
     {
         public int UserNumber { get; set; }
         public string Message { get; set; }

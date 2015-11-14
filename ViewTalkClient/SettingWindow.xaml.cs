@@ -12,11 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WakeUpMessangerClient
+namespace ViewTalkClient
 {
-    public partial class JoinWindow : Window
+    /// <summary>
+    /// Interaction logic for SettingWindow.xaml
+    /// </summary>
+    public partial class SettingWindow : Window
     {
-        public JoinWindow()
+        public SettingWindow()
         {
             InitializeComponent();
         }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-using WakeUpMessangerClient.Modules;
+using ViewTalkClient.Modules;
 
-namespace WakeUpMessangerClient
+namespace ViewTalkClient
 {
     public partial class App : Application
     {

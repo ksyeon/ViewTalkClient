@@ -9,10 +9,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls; // PasswordBox 추가
 
-using WakeUpMessangerClient.Models;
-using WakeUpMessangerClient.Modules;
+using ViewTalkClient.Models;
 
-namespace WakeUpMessangerClient.ViewModels
+namespace ViewTalkClient.ViewModels
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
@@ -26,11 +25,6 @@ namespace WakeUpMessangerClient.ViewModels
         public ICommand ClickLogin
         {
             get { return new DelegateCommand2(Login); }
-        }
-
-        public ICommand ClickJoin
-        {
-            get { return new DelegateCommand(Join); }
         }
 
         public LoginViewModel()
@@ -83,12 +77,6 @@ namespace WakeUpMessangerClient.ViewModels
             {
                 App.TcpClient.SendLogin(ID, password); // 일정 시간 후 연결 종료(MessageBox 띄우기)
             }
-        }
-
-        private void Join()
-        {
-            JoinWindow joinWindow = new JoinWindow();
-            joinWindow.ShowDialog();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.Net.Json;
 
-namespace WakeUpMessangerClient.Modules
+namespace ViewTalkClient.Modules
 {
     public class JsonName
     {

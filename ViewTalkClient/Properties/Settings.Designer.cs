@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WakeUpMessangerClient.Properties
+namespace ViewTalkClient.Properties
 {
 
 
