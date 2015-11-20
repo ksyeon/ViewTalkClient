@@ -7,8 +7,8 @@
     <ProjectGuid>{4A582D30-3B21-4B90-806D-06E00653AFDF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WakeUpMessangerClient</RootNamespace>
-    <AssemblyName>WakeUpMessangerClient</AssemblyName>
+    <RootNamespace>ViewTalkClient</RootNamespace>
+    <AssemblyName>ViewTalkClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,8 +61,8 @@
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ChattingData.cs" />
-    <Compile Include="Models\MessageData.cs" />
+    <Compile Include="Models\ChatMessage.cs" />
+    <Compile Include="Models\TcpMessage.cs" />
     <Compile Include="Modules\JsonHelper.cs" />
     <Compile Include="Modules\JsonParser.cs" />
     <Compile Include="Modules\TcpClient.cs" />
@@ -70,7 +70,8 @@
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ChattingViewModel.cs" />
+    <Compile Include="ViewModels\ChattingViewMedel.cs" />
+    <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\SettingVIewModel.cs" />
     <Compile Include="Views\ChattingView.xaml.cs">
       <DependentUpon>ChattingView.xaml</DependentUpon>

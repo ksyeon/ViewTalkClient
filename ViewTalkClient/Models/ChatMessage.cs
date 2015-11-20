@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ViewTalkClient.Models
 {
-    public class ChattingData
+    public class ChatMessage
     {
         public int UserNumber { get; set; }
         public string Message { get; set; }
 
-        public ChattingData(int userNumber, string message)
+        public ChatMessage(int userNumber, string message)
         {
             this.UserNumber = userNumber;
             this.Message = message;

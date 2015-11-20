@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Net;
-using System.Net.Sockets;
-
 using ViewTalkClient.Models;
 
 namespace ViewTalkClient.Modules
@@ -18,7 +15,7 @@ namespace ViewTalkClient.Modules
 
         public int UserNumber { get; set; }
 
-        public delegate void MessageDelegate(MessageData message);
+        public delegate void MessageDelegate(TcpMessage message);
         public MessageDelegate ExecuteMessage { get; set; }        
 
         public TcpClientHelper() : base(ServerIP, ServerPort)
@@ -26,9 +23,9 @@ namespace ViewTalkClient.Modules
 
         }
 
-        public void SendLogin(string id, string password)
+        public void RequestLogin(string id, string password)
         {
-            MessageData message = new MessageData();
+            TcpMessage message = new TcpMessage();
 
             JsonHelper json = new JsonHelper();
 
@@ -38,9 +35,9 @@ namespace ViewTalkClient.Modules
             SendMessage(message);
         }
 
-        public void SendConnect()
+        public void RequestConnect()
         {
-            MessageData message = new MessageData();
+            TcpMessage message = new TcpMessage();
 
             message.Command = Command.Connect;
             message.Number = UserNumber;
@@ -48,9 +45,9 @@ namespace ViewTalkClient.Modules
             SendMessage(message);
         }
 
-        public void SendChatting(string chatting)
+        public void RequestChatting(string chatting)
         {
-            MessageData message = new MessageData();
+            TcpMessage message = new TcpMessage();
 
             message.Command = Command.Message;
             message.Number = UserNumber;
@@ -59,7 +56,7 @@ namespace ViewTalkClient.Modules
             SendMessage(message);
         }
 
-        public override void CheckMessage(MessageData message)
+        public override void ResponseMessage(TcpMessage message)
         {
             ExecuteMessage(message);
         }

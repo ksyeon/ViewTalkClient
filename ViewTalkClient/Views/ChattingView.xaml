@@ -28,7 +28,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox Text="{Binding ChattingMessage}" Grid.Column="0" Style="{StaticResource ChattingTextBoxStyle}" />
-            <Button Content="전송" Grid.Column="1" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickSendMessage}" />
+            <Button Content="전송" Grid.Column="1" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickSendChat}" />
         </Grid>
     </Grid>
 </UserControl>

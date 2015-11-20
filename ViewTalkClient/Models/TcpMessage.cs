@@ -16,14 +16,14 @@ namespace ViewTalkClient.Models
         Message
     }
 
-    public class MessageData
+    public class TcpMessage
     {
         public Command Command { get; set; }
         public int Auth { get; set; }
         public int Number { get; set; }
         public string Message { get; set; }
 
-        public MessageData()
+        public TcpMessage()
         {
             this.Command = Command.Null;
             this.Auth = 1; // True
@@ -31,7 +31,7 @@ namespace ViewTalkClient.Models
             this.Message = string.Empty;
         }
 
-        public MessageData(byte[] byteData)
+        public TcpMessage(byte[] byteData)
         {
             this.Command = (Command)BitConverter.ToInt32(byteData, 0);
             this.Auth = BitConverter.ToInt32(byteData, 4);

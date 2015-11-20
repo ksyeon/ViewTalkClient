@@ -31,10 +31,10 @@ namespace ViewTalkClient.ViewModels
         {
             this.ID = string.Empty;
 
-            App.TcpClient.ExecuteMessage = ExecuteMessage;
+            App.TcpClient.ExecuteMessage = ResponseMessage;
         }
 
-        public void ExecuteMessage(MessageData message)
+        public void ResponseMessage(TcpMessage message)
         {
             switch (message.Command)
             {
@@ -56,7 +56,7 @@ namespace ViewTalkClient.ViewModels
                     }
                     else
                     {
-                        MessageBox.Show("아이디/비밀번호가 일치하지 않습니다.", "WakeUp! Messanger");
+                        MessageBox.Show("아이디/비밀번호가 일치하지 않습니다.", "ViewTalk");
                     }
 
                     break;
@@ -67,15 +67,15 @@ namespace ViewTalkClient.ViewModels
         {
             if (string.IsNullOrEmpty(ID))
             {
-                MessageBox.Show("아이디를 입력하세요.", "WakeUp! Messanger");
+                MessageBox.Show("채팅방이 종료되었습니다.", "ViewTalk");
             }
             else if (string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("비밀번호를 입력하세요.", "WakeUp! Messanger");
+                MessageBox.Show("비밀번호를 입력하세요.", "ViewTalk");
             }
             else
             {
-                App.TcpClient.SendLogin(ID, password); // 일정 시간 후 연결 종료(MessageBox 띄우기)
+                App.TcpClient.RequestLogin(ID, password); // 일정 시간 후 연결 종료(MessageBox 띄우기)
             }
         }
 

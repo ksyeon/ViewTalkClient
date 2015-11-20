@@ -29,7 +29,7 @@ namespace ViewTalkClient.Modules
             ConnectSocket();
         }
 
-        public void ConnectSocket()
+        private void ConnectSocket()
         {
             try
             {
@@ -63,7 +63,7 @@ namespace ViewTalkClient.Modules
             }
         }
 
-        protected void SendMessage(MessageData message)
+        protected void SendMessage(TcpMessage message)
         {
             try
             {
@@ -96,8 +96,8 @@ namespace ViewTalkClient.Modules
             {
                 clientSocket.EndReceive(ar);
 
-                MessageData receiveMessage = new MessageData(byteData);
-                CheckMessage(receiveMessage);
+                TcpMessage receiveMessage = new TcpMessage(byteData);
+                ResponseMessage(receiveMessage);
 
                 clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 
@@ -108,7 +108,7 @@ namespace ViewTalkClient.Modules
             }
         }
 
-        public void CloseSocket()
+        protected void CloseSocket()
         {
             try
             {
@@ -121,6 +121,6 @@ namespace ViewTalkClient.Modules
             }
         }
 
-        public abstract void CheckMessage(MessageData receiveMessage);
+        public abstract void ResponseMessage(TcpMessage receiveMessage);
     }
 }

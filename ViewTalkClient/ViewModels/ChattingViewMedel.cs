@@ -14,7 +14,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class ChattingViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ChattingData> Chatting { get; set; }
+        public ObservableCollection<ChatMessage> Chatting { get; set; }
         public ObservableCollection<int> Participant { get; set; }
 
         private string _chattingMessage;
@@ -24,23 +24,23 @@ namespace ViewTalkClient.ViewModels
             set { _chattingMessage = value; OnNotifyPropertyChanged("ChattingMessage"); }
         }
 
-        public ICommand ClickSendMessage
+        public ICommand ClickSendChat
         {
-            get { return new DelegateCommand(SendMessage); }
+            get { return new DelegateCommand(new Action(CommandSendChat), null); }
         }
 
         public ChattingViewModel()
         {
             this.Participant = new ObservableCollection<int>();
-            this.Chatting = new ObservableCollection<ChattingData>();
+            this.Chatting = new ObservableCollection<ChatMessage>();
 
             this.ChattingMessage = string.Empty;
 
-            App.TcpClient.ExecuteMessage = ExecuteMessage;
-            App.TcpClient.SendConnect();
+            App.TcpClient.ExecuteMessage = ResponseMessage;
+            App.TcpClient.RequestConnect();
         }
 
-        public void ExecuteMessage(MessageData message)
+        public void ResponseMessage(TcpMessage message)
         {
             string notice = string.Empty;
 
@@ -52,7 +52,7 @@ namespace ViewTalkClient.ViewModels
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
                         Participant.Add(message.Number);
-                        Chatting.Add(new ChattingData(message.Number, notice));
+                        Chatting.Add(new ChatMessage(message.Number, notice));
                     });
 
                     break;
@@ -63,7 +63,7 @@ namespace ViewTalkClient.ViewModels
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
                         Participant.Remove(message.Number);
-                        Chatting.Add(new ChattingData(message.Number, notice));
+                        Chatting.Add(new ChatMessage(message.Number, notice));
                     });
 
                     break;
@@ -71,7 +71,7 @@ namespace ViewTalkClient.ViewModels
                 case Command.Message:
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
-                        Chatting.Add(new ChattingData(message.Number, message.Message));
+                        Chatting.Add(new ChatMessage(message.Number, message.Message));
                     });
 
                     break;
@@ -82,13 +82,13 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
-        private void SendMessage()
+        private void CommandSendChat()
         {
             if (ChattingMessage.Length > 0)
             {
-                Chatting.Add(new ChattingData(App.TcpClient.UserNumber, ChattingMessage));
+                Chatting.Add(new ChatMessage(App.TcpClient.UserNumber, ChattingMessage));
 
-                App.TcpClient.SendChatting(ChattingMessage);
+                App.TcpClient.RequestChatting(ChattingMessage);
 
                 ChattingMessage = "";
             }
@@ -102,27 +102,5 @@ namespace ViewTalkClient.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-
-    public class DelegateCommand : ICommand
-    {
-        private readonly Action _action;
-
-        public DelegateCommand(Action action)
-        {
-            _action = action;
-        }
-
-        public void Execute(object parameter)
-        {
-            _action();
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
     }
 }
