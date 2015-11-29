@@ -41,7 +41,7 @@ namespace ViewTalkClient.ViewModels
         {
             if (string.IsNullOrEmpty(ID))
             {
-                MessageBox.Show("아이디를 입력하세요.;", AppConst.AppName);
+                MessageBox.Show("아이디를 입력하세요.", AppConst.AppName);
             }
             else if (string.IsNullOrEmpty(password))
             {
@@ -49,16 +49,24 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                tcpClient.RequestLogin(ID, password);
+                bool isSuccess = tcpClient.RequestLogin(ID, password);
+
+                if (!isSuccess)
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+
+                    // Close();
+                }
             }
         }
 
-        private void ValidateLogin(int check, int userNumber)
+        private void ValidateLogin(int check, int userNumber, string nickname)
         {
             switch (check)
             {
                 case 0:
                     tcpClient.User.Number = userNumber;
+                    tcpClient.User.Nickname = nickname;
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
@@ -85,7 +93,7 @@ namespace ViewTalkClient.ViewModels
             switch (message.Command)
             {
                 case Command.Login:
-                    ValidateLogin(message.Check, message.UserNumber);
+                    ValidateLogin(message.Check, message.UserNumber, message.Message);
                     break;
             }
         }

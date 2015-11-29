@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource ChattingBorderStyle}">
-                <Image />
+                <Image Source="{Binding Path=PPT.CurrentPPT}" />
             </Border>
 
             <Border Grid.Row="1" Margin="10,0,10,10" Style="{StaticResource ChattingBorderStyle}">
@@ -43,29 +43,35 @@
                         <ColumnDefinition Width="15*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button BorderThickness="0" Grid.Column="0" Margin="5,5,5,5" Command="{Binding Path=CommandLoadPPT}">
+                    <Button BorderThickness="0" Grid.Column="0" Margin="5,5,5,5" Command="{Binding Path=ClickLoadPPT}">
                         <Image Source="/Resources/PPTLoad.png" />
                     </Button>
 
-                    <Button BorderThickness="0" Grid.Column="2" Margin="5,5,0,5" Command="{Binding Path=CommandLoadPPT}">
+                    <Button BorderThickness="0" Grid.Column="2" Margin="5,5,0,5" Command="{Binding Path=ClickLeftPPT}">
                         <Image Source="/Resources/PPTLeft.png" />
                     </Button>
 
-                    <Button BorderThickness="0" Grid.Column="3" Margin="0,5,5,5"  Command="{Binding Path=CommandLoadPPT}">
+                    <Button BorderThickness="0" Grid.Column="3" Margin="0,5,5,5"  Command="{Binding Path=ClickRightPPT}">
                         <Image Source="/Resources/PPTRight.png" />
                     </Button>
                 </Grid>
             </Border>
         </Grid>
 
-        <ListView Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="10,0,10,10" Style="{StaticResource ChatListStyle}" />
-
-        <!-- Chatting -->
-        <ListView DataContext="UserChat" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,10,10" Style="{StaticResource ChatListStyle}">
+        <ListView ItemsSource="{Binding Path=TeacherChat}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="10,0,10,10" Style="{StaticResource ChatListViewStyle}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="100" Header="닉네임" DisplayMemberBinding="{Binding Path=UserNickname}" />
-                    <GridViewColumn Width="200" Header="내용" DisplayMemberBinding="{Binding Path=Message}" />
+                    <GridViewColumn Width="300" Header="내용" DisplayMemberBinding="{Binding Path=Message}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Chatting -->
+        <ListView ItemsSource="{Binding Path=UserChat}"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,10,10" Style="{StaticResource ChatListViewStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="70" Header="닉네임" DisplayMemberBinding="{Binding Path=Nickname}" />
+                    <GridViewColumn Width="250" Header="내용" DisplayMemberBinding="{Binding Path=Message}" />
                 </GridView>
             </ListView.View>
         </ListView>
@@ -78,26 +84,33 @@
 
             <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextStyle}" />
 
-            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButton}" Command="{Binding Path=ClickSendChat}">
+            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButtonStyle}" Command="{Binding Path=ClickSendChat}">
                 <Image Source="/Resources/SendChat.png" Margin="10,10,10,10" />
             </Button>
         </Grid>
 
         <!-- User List -->
-        <Grid Grid.Column="2" Grid.RowSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="4*" />
-            </Grid.RowDefinitions>
-            
-            <Rectangle Grid.RowSpan="3" Style="{StaticResource Friend }" />
-            <Rectangle Grid.Row="0" Style="{StaticResource Professor}">
-                <!-- 채팅방장 이름 넣기 -->
-            </Rectangle>
-            <Rectangle Grid.Row="1" Style="{StaticResource FriendList}"  >
+        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Margin="0,10,10,10" Style="{StaticResource ChattingBorderStyle}">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*" />
+                    <RowDefinition Height="80*" />
+                </Grid.RowDefinitions>
 
-            </Rectangle>
-        </Grid>
+                <Rectangle Fill="{StaticResource TeacherColor}" Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource UserRectangleStyle}" />
+                <TextBlock Text="{Binding Path=Users[0].Nickname}" Grid.Row="0" Style="{StaticResource TeacherTextBlockStyle}" />
+
+                <Rectangle Fill="{StaticResource StudentColor}" Grid.Row="1" Margin="10,0,10,0" Style="{StaticResource UserRectangleStyle}" />
+                <ListView Background="{StaticResource StudentColor}" HorizontalContentAlignment="Center" BorderThickness="0" ItemsSource="{Binding Path=Users}" Grid.Row="1" Margin="15,5,15,5">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Nickname}" Style="{StaticResource StudentTextBlockStyle}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                </ListView>
+            </Grid>
+        </Border>
     </Grid>
 
 </Window>

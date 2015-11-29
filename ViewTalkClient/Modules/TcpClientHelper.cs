@@ -27,14 +27,14 @@ namespace ViewTalkClient.Modules
             this.User = new UserData();
         }
 
-        public void RequestLogin(string id, string password)
+        public bool RequestLogin(string id, string password)
         {
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.Login;
             message.Message = json.SetLoginInfo(id, password);
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
         public void RequestLogout()
@@ -72,16 +72,22 @@ namespace ViewTalkClient.Modules
 
         public void RequestJoinUser()
         {
+            TcpMessage message = new TcpMessage();
 
+            message.Command = Command.JoinUser;
+            message.UserNumber = User.Number;
+            message.ChatNumber = ChatNumber;
+
+            SendMessage(message);
         }
 
-        public void RequestSendChat(int chatNumber, string chatMessage)
+        public void RequestSendChat(string chatMessage)
         {
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.SendChat ;
             message.UserNumber = User.Number;
-            message.ChatNumber = chatNumber;
+            message.ChatNumber = ChatNumber;
             message.Message = chatMessage;
 
             SendMessage(message);

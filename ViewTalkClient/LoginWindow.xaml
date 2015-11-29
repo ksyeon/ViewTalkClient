@@ -33,9 +33,9 @@
                 <RowDefinition Height="40*" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextStyle}" />
+            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextBoxStyle}" />
 
-            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordStyle}" />
+            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" />
 
             <Button Content="Login" Grid.Row="2" Grid.Column="1" Style="{StaticResource LoginButtonStyle}" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
         </Grid>

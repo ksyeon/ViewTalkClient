@@ -4,9 +4,11 @@
     <!-- SolidColorBrush -->
     <SolidColorBrush x:Key="ApplicationColor" Color="#025E73" />
     <SolidColorBrush x:Key="BackgroundColor" Color="White" />
-    
-    <!-- Style -->
-    <Style x:Key="IDTextStyle" TargetType="TextBox">
+    <SolidColorBrush x:Key="TeacherColor" Color="#4CEA9F3C"/>
+    <SolidColorBrush x:Key="StudentColor" Color="#19025E73" />
+
+        <!-- Style -->
+    <Style x:Key="IDTextBoxStyle" TargetType="TextBox">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -14,7 +16,7 @@
         <Setter Property="MaxLength" Value="12" />
     </Style>
 
-    <Style x:Key="PasswordStyle" TargetType="PasswordBox">
+    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -27,7 +29,7 @@
         <Setter Property="Foreground" Value="{StaticResource BackgroundColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Margin" Value="0,5,0,5" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
@@ -54,7 +56,7 @@
         <Setter Property="Margin" Value="10,10,10,10" />
     </Style>
 
-    <Style x:Key="ChatListStyle" TargetType="ListView">
+    <Style x:Key="ChatListViewStyle" TargetType="ListView">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}" />
         <Setter Property="BorderThickness" Value="2" />
     </Style>
@@ -68,45 +70,32 @@
         <Setter Property="MaxLength" Value="255" />
     </Style>
 
-    <Style x:Key="ChatSendButton" TargetType="Button">
+    <Style x:Key="ChatSendButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#EA9F3C"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="0,0,10,10" />
     </Style>
 
-    <Style x:Key="Friend" TargetType="Rectangle" >
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Width" Value="Auto" />
-        <Setter Property="Margin" Value="0, 10, 10, 10" />
+    <Style x:Key="UserRectangleStyle" TargetType="Rectangle" >
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
         <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="RadiusX" Value="10" />
+        <Setter Property="RadiusY" Value="10" />
     </Style>
 
-    <Style x:Key="Professor" TargetType="Rectangle" >
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Width" Value="Auto" />
-        <Setter Property="Margin" Value="10,20,20,10" />
-        <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
-        <Setter Property="StrokeThickness" Value="2" />
-        <Setter Property="Fill" Value="#4CEA9F3C" />
-        <Setter Property="RadiusX" Value="10" />
-        <Setter Property="RadiusY" Value="10" />
+    <Style x:Key="TeacherTextBlockStyle" TargetType="TextBlock" >
+        <Setter Property="Foreground" Value="{StaticResource ApplicationColor}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
-    
-    <Style x:Key="FriendList" TargetType="Rectangle" >
-        <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Width" Value="Auto" />
-        <Setter Property="Margin" Value="10,0,20,20" />
-        <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
-        <Setter Property="StrokeThickness" Value="2" />
-        <Setter Property="Fill" Value="#19025E73" />
-        <Setter Property="RadiusX" Value="10" />
-        <Setter Property="RadiusY" Value="10" />
+
+    <Style x:Key="StudentTextBlockStyle" TargetType="TextBlock" >
+        <Setter Property="Foreground" Value="{StaticResource ApplicationColor}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 </ResourceDictionary>

@@ -17,11 +17,11 @@ namespace ViewTalkClient.ViewModels
     {
         private TcpClientHelper tcpClient;
 
-        private string _teacherNickName;
-        public string TecherNickName
+        private string _teacherNickname;
+        public string TecherNickname
         {
-            get { return _teacherNickName; }
-            set { _teacherNickName = value; OnNotifyPropertyChanged("TecherNickName"); }
+            get { return _teacherNickname; }
+            set { _teacherNickname = value; OnNotifyPropertyChanged("TecherNickName"); }
         }
 
         public ICommand ClickCreateChatting
@@ -52,7 +52,14 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandJoinChatting()
         {
-            tcpClient.RequestJoinChatting(TecherNickName);
+            if(string.IsNullOrEmpty(TecherNickname))
+            {
+                MessageBox.Show("강사의 닉네임을 입력하세요.", AppConst.AppName);
+            }
+            else
+            {
+                tcpClient.RequestJoinChatting(TecherNickname);
+            }
         }
 
         public void CommandLogout()
@@ -80,6 +87,7 @@ namespace ViewTalkClient.ViewModels
 
         private void CreateChatting()
         {
+            tcpClient.ChatNumber = tcpClient.User.Number;
             tcpClient.User.IsTeacher = true;
 
             App.Current.Dispatcher.InvokeAsync(() =>
@@ -110,10 +118,12 @@ namespace ViewTalkClient.ViewModels
                     break;
 
                 case 1:
+                    TecherNickname = string.Empty;
                     MessageBox.Show("개설되지 않은 채팅방입니다.", AppConst.AppName);
                     break;
 
                 case 2:
+                    TecherNickname = string.Empty;
                     MessageBox.Show("존재하지 않는 닉네임입니다.", AppConst.AppName);
                     break;
             }

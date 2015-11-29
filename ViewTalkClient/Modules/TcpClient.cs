@@ -64,19 +64,25 @@ namespace ViewTalkClient.Modules
             }
         }
 
-        protected void SendMessage(TcpMessage message)
+        protected bool SendMessage(TcpMessage message)
         {
+            bool isSendSucess = false;
+
             try
             {
                 byte[] byteMessage = message.ToByteData();
 
                 /* [3] Send */
                 clientSocket.BeginSend(byteMessage, 0, byteMessage.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+
+                isSendSucess = true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
+            return isSendSucess;
         }
 
         private void OnSend(IAsyncResult ar)

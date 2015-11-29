@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
+
+using Microsoft.Win32;
 
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
-using System.Windows.Input;
 
 namespace ViewTalkClient.ViewModels
 {
@@ -17,13 +19,11 @@ namespace ViewTalkClient.ViewModels
     {
         private TcpClientHelper tcpClient;
 
-        private int chatNumber;
-        private bool isTeacher;
-
         public ObservableCollection<UserData> Users { get; set; }
         public ObservableCollection<ChatMessage> UserChat { get; set; }
         public ObservableCollection<ChatMessage> TeacherChat { get; set; }
-        // PPTData
+
+        public PPTData PPT { get; set; }
 
         private string _chatMessage;
         public string ChatMessage
@@ -37,17 +37,31 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandSendChat()); }
         }
 
+        public ICommand ClickLoadPPT
+        {
+            get { return new DelegateCommand(param => CommandLoadPPT()); }
+        }
+
+        public ICommand ClickLeftPPT
+        {
+            get { return new DelegateCommand(param => CommandMovePPT(0)); }
+        }
+
+        public ICommand ClickRightPPT
+        {
+            get { return new DelegateCommand(param => CommandMovePPT(1)); }
+        }
+
         public ChattingViewModel(TcpClientHelper tcpClient)
         {
             this.tcpClient = tcpClient;
             tcpClient.ExecuteMessage = ResponseMessage;
 
-            this.chatNumber = tcpClient.ChatNumber;
-            this.isTeacher = tcpClient.User.IsTeacher;
-
             this.Users = new ObservableCollection<UserData>();
             this.UserChat = new ObservableCollection<ChatMessage>();
             this.TeacherChat = new ObservableCollection<ChatMessage>();
+
+            this.PPT = new PPTData();
 
             this.ChatMessage = string.Empty;
 
@@ -56,11 +70,11 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandSendChat()
         {
-            if (ChatMessage.Length > 0)
+            if (!string.IsNullOrEmpty(ChatMessage))
             {
                 AddChatMessage(tcpClient.User.Number, ChatMessage);
 
-                tcpClient.RequestSendChat(chatNumber, ChatMessage);
+                tcpClient.RequestSendChat(ChatMessage);
 
                 ChatMessage = "";
             }
@@ -68,32 +82,57 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandCloseChatting()
         {
-
+            // 이전 윈도우
         }
 
         public void CommandLoadPPT()
         {
+            OpenFileDialog openFile = new OpenFileDialog();
 
+            openFile.DefaultExt = "pptx";
+            openFile.Filter = "PowerPoint 프레젠테이션 (*.pptx;*.ppt)|*.pptx;*.ppt";
+
+            openFile.ShowDialog();
+
+            if (openFile.FileName.Length > 0)
+            {
+                PowerPoint powerPoint = new PowerPoint();
+
+                List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
+                PPT.LoadPPT(bytePPT);
+            }
         }
 
-        public void CommandMovePPT()
+        public void CommandMovePPT(int direction)
         {
+            switch (direction)
+            {
+                case 0: // Left
+                    if (PPT.CurrentPage - 1 >= 0)
+                    {
+                        PPT.CurrentPPT = PPT.BytePPT[--PPT.CurrentPage];
+                    }
+                    break;
 
+                case 1: // Right
+                    if (PPT.CurrentPage + 1 <= PPT.LastPage)
+                    {
+                        PPT.CurrentPPT = PPT.BytePPT[++PPT.CurrentPage];
+                    }
+                    break;
+            }
         }
 
         public void CommandClosePPT()
         {
-
+            PPT.ResetPPT();
         }
 
         public void InitializeChatting()
         {
-            // 방장/참여자 정보 가져오기
-            // PPT 가져오기
-
             if (tcpClient.User.IsTeacher)
             {
-                chatNumber = tcpClient.User.Number;
+                Users.Add(tcpClient.User);
             }
             else
             {
@@ -106,7 +145,16 @@ namespace ViewTalkClient.ViewModels
             switch (message.Command)
             {
                 case Command.JoinUser:
-                    AddUser(new UserData(message.UserNumber, message.Message, false));
+                    switch (message.Check)
+                    {
+                        case 0:
+                            AddUser(new UserData(message.UserNumber, message.Message, false));
+                            break;
+
+                        case 1:
+                            updateChatting(message.Message);
+                            break;
+                    }
                     break;
 
                 case Command.ExitUser:
@@ -127,6 +175,17 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
+        private void updateChatting(string message)
+        {
+            JsonHelper json = new JsonHelper();
+
+            List<UserData> userList = json.GetChattingInfo(message);
+
+            Users = new ObservableCollection<UserData>(userList);
+
+            // PPT 불러오기
+        }
+
         private void AddUser(UserData user)
         {
             string notice = user.Nickname + " 님이 입장하셨습니다.";
@@ -134,17 +193,19 @@ namespace ViewTalkClient.ViewModels
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Add(user);
+
                 UserChat.Add(new ChatMessage(true, user.Nickname, notice));
             });
         }
 
-        private void Delete(UserData user)
+        private void DeleteUser(UserData user)
         {
             string notice = user.Nickname + " 님이 퇴장하셨습니다.";
 
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Remove(user);
+
                 UserChat.Add(new ChatMessage(true, user.Nickname, notice));
             });
         }
@@ -153,16 +214,13 @@ namespace ViewTalkClient.ViewModels
         {
             App.Current.Dispatcher.InvokeAsync(() =>
             {
-                UserData SendChatUser = Users.First(x => (x.Number == userNumber));
+                UserData SendChatUser = Users.First(x => (x.Number == userNumber)); // 예외
 
-                if (SendChatUser != null)
+                UserChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
+
+                if (SendChatUser.IsTeacher)
                 {
-                    UserChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
-
-                    if (SendChatUser.IsTeacher)
-                    {
-                        TeacherChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
-                    }
+                    TeacherChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
                 }
             });
         }

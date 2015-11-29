@@ -9,13 +9,13 @@ namespace ViewTalkClient.Models
     public class ChatMessage
     {
         public bool IsNotice { get; set; }
-        public string UserNickname { get; set; }
+        public string Nickname { get; set; }
         public string Message { get; set; }
 
-        public ChatMessage(bool isNotice, string UserNickname, string message)
+        public ChatMessage(bool isNotice, string nickname, string message)
         {
             this.IsNotice = isNotice;
-            this.UserNickname = UserNickname;
+            this.Nickname = nickname;
             this.Message = message;
         }
     }
