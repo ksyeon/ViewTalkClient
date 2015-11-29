@@ -113,9 +113,7 @@ namespace ViewTalkClient.ViewModels
                     break;
 
                 case Command.SendChat:
-                    if(chatNumber == message.UserNumber)
                     AddChatMessage(message.UserNumber, message.Message);
-
                     break;
 
                 case Command.LoadPPT:
