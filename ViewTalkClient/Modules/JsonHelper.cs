@@ -21,7 +21,7 @@ namespace ViewTalkClient.Modules
 
         }
 
-        public string GetLoginInfo(string id, string password)
+        public string SetLoginInfo(string id, string password)
         {
             JsonObjectCollection result = new JsonObjectCollection();
 

@@ -12,26 +12,17 @@ namespace ViewTalkClient.ViewModels
     {
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
-        private Action action;
-        private object p;
 
         public event EventHandler CanExecuteChanged;
 
         public DelegateCommand(Action<object> execute) : this(execute, null)
         {
-
         }
 
         public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
-        }
-
-        public DelegateCommand(Action action, object p)
-        {
-            this.action = action;
-            this.p = p;
         }
 
         public bool CanExecute(object parameter)

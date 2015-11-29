@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\..\..\..\Desktop\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Json">
@@ -58,11 +61,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    <Compile Include="AppConst.cs" />
+    <Compile Include="ChattingWindow.xaml.cs">
+      <DependentUpon>ChattingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\TcpMessage.cs" />
+    <Compile Include="Models\UserData.cs" />
     <Compile Include="Modules\JsonHelper.cs" />
     <Compile Include="Modules\JsonParser.cs" />
     <Compile Include="Modules\TcpClient.cs" />
@@ -72,22 +77,14 @@
     </Compile>
     <Compile Include="ViewModels\ChattingViewMedel.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
-    <Compile Include="ViewModels\SettingVIewModel.cs" />
-    <Compile Include="Views\ChattingView.xaml.cs">
-      <DependentUpon>ChattingView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\SettingViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="Views\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingView.xaml.cs">
-      <DependentUpon>SettingView.xaml</DependentUpon>
-    </Compile>
-    <Page Include="LoginWindow.xaml">
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Page Include="ChattingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -95,8 +92,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SettingWindow.xaml">
@@ -104,18 +101,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\ResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ChattingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SettingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,12 +133,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Menu_Chatting.png" />
-    <Resource Include="Resources\Menu_Friend.png" />
-    <Resource Include="Resources\Menu_Setting.png" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Login_Main.png" />
+    <Resource Include="Resources\PPTLeft.png" />
+    <Resource Include="Resources\Logo.png" />
+    <Resource Include="Resources\CreateChatting.png" />
+    <Resource Include="Resources\PPTLoad.png" />
+    <Resource Include="Resources\PPTRight.png" />
+    <Resource Include="Resources\JoinChatting.png" />
+    <Resource Include="Resources\SendChat.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

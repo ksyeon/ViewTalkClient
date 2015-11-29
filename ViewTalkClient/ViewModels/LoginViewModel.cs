@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Controls; // PasswordBox 추가
 
 using ViewTalkClient.Models;
+using ViewTalkClient.Modules;
 
 namespace ViewTalkClient.ViewModels
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
+        private TcpClientHelper tcpClient;
+
         private string _id;
         public string ID
         {
@@ -24,14 +26,58 @@ namespace ViewTalkClient.ViewModels
 
         public ICommand ClickLogin
         {
-            get { return new DelegateCommand2(Login); }
+            get { return new DelegateCommand(param => CommandLogin("1234")); }
         }
 
-        public LoginViewModel()
+        public LoginViewModel(TcpClientHelper tcpClient)
         {
-            this.ID = string.Empty;
+            this.tcpClient = tcpClient;
+            this.tcpClient.ExecuteMessage = ResponseMessage;
 
-            App.TcpClient.ExecuteMessage = ResponseMessage;
+            this.ID = string.Empty;
+        }
+
+        private void CommandLogin(string password)
+        {
+            if (string.IsNullOrEmpty(ID))
+            {
+                MessageBox.Show("아이디를 입력하세요.;", AppConst.AppName);
+            }
+            else if (string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("비밀번호를 입력하세요.", AppConst.AppName);
+            }
+            else
+            {
+                tcpClient.RequestLogin(ID, password);
+            }
+        }
+
+        private void ValidateLogin(int check, int userNumber)
+        {
+            switch (check)
+            {
+                case 0:
+                    tcpClient.User.Number = userNumber;
+
+                    App.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        SettingWindow settingWindow = new SettingWindow();
+                        settingWindow.ShowDialog();
+                        
+                        // Close();
+                    });
+
+                    break;
+
+                case 1:
+                    MessageBox.Show("이미 로그인되어 있습니다.", AppConst.AppName);
+                    break;
+
+                case 2:
+                    MessageBox.Show("아이디/비밀번호가 일치하지 않습니다.", AppConst.AppName);
+                    break;
+            }
         }
 
         public void ResponseMessage(TcpMessage message)
@@ -39,43 +85,8 @@ namespace ViewTalkClient.ViewModels
             switch (message.Command)
             {
                 case Command.Login:
-                    bool isExistUser = Convert.ToBoolean(message.Auth);
-
-                    if (isExistUser)
-                    {
-                        App.TcpClient.UserNumber = message.Number;
-                        App.TcpClient.ExecuteMessage = null;
-
-                        App.Current.Dispatcher.InvokeAsync(() =>
-                        {
-                            MainWindow mainWindow = new MainWindow();
-                            mainWindow.ShowDialog();
-                        });
-
-                        // Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("아이디/비밀번호가 일치하지 않습니다.", "ViewTalk");
-                    }
-
+                    ValidateLogin(message.Check, message.UserNumber);
                     break;
-            }
-        }
-
-        private void Login(string password)
-        {
-            if (string.IsNullOrEmpty(ID))
-            {
-                MessageBox.Show("채팅방이 종료되었습니다.", "ViewTalk");
-            }
-            else if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("비밀번호를 입력하세요.", "ViewTalk");
-            }
-            else
-            {
-                App.TcpClient.RequestLogin(ID, password); // 일정 시간 후 연결 종료(MessageBox 띄우기)
             }
         }
 
@@ -87,30 +98,5 @@ namespace ViewTalkClient.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-
-    public class DelegateCommand2 : ICommand
-    {
-        private readonly Action<string> _action;
-
-        public DelegateCommand2(Action<string> action)
-        {
-            _action = action;
-        }
-
-        public void Execute(object parameter)
-        {
-            var passwordBox = parameter as PasswordBox;
-            string password = passwordBox.Password;
-
-            _action(password);
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

@@ -10,17 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ViewTalkClient.Views
+using ViewTalkClient.ViewModels;
+
+namespace ViewTalkClient
 {
-    /// <summary>
-    /// Interaction logic for SettingView.xaml
-    /// </summary>
-    public partial class SettingView : UserControl
+    public partial class ChattingWindow : Window
     {
-        public SettingView()
+        public ChattingWindow()
         {
             InitializeComponent();
         }

@@ -1,0 +1,103 @@
+﻿<Window x:Class="ViewTalkClient.ChattingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ViewTalkClient"
+        mc:Ignorable="d"
+        Title="View Talk" Width="900" Height="500">
+
+    <Window.DataContext>
+        <Binding Path="ChattingViewModel" Source="{StaticResource ViewModelLocator}" />
+    </Window.DataContext>
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="375*" />
+            <ColumnDefinition Width="375*" />
+            <ColumnDefinition Width="150*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="350*" />
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="100*" />
+        </Grid.RowDefinitions>
+
+        <!-- PPT Viewer -->
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="290*" />
+                <RowDefinition Height="60*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource ChattingBorderStyle}">
+                <Image />
+            </Border>
+
+            <Border Grid.Row="1" Margin="10,0,10,10" Style="{StaticResource ChattingBorderStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20*" />
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="15*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button BorderThickness="0" Grid.Column="0" Margin="5,5,5,5" Command="{Binding Path=CommandLoadPPT}">
+                        <Image Source="/Resources/PPTLoad.png" />
+                    </Button>
+
+                    <Button BorderThickness="0" Grid.Column="2" Margin="5,5,0,5" Command="{Binding Path=CommandLoadPPT}">
+                        <Image Source="/Resources/PPTLeft.png" />
+                    </Button>
+
+                    <Button BorderThickness="0" Grid.Column="3" Margin="0,5,5,5"  Command="{Binding Path=CommandLoadPPT}">
+                        <Image Source="/Resources/PPTRight.png" />
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <ListView Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="10,0,10,10" Style="{StaticResource ChatListStyle}" />
+
+        <!-- Chatting -->
+        <ListView DataContext="UserChat" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,10,10" Style="{StaticResource ChatListStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" Header="닉네임" DisplayMemberBinding="{Binding Path=UserNickname}" />
+                    <GridViewColumn Width="200" Header="내용" DisplayMemberBinding="{Binding Path=Message}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextStyle}" />
+
+            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButton}" Command="{Binding Path=ClickSendChat}">
+                <Image Source="/Resources/SendChat.png" Margin="10,10,10,10" />
+            </Button>
+        </Grid>
+
+        <!-- User List -->
+        <Grid Grid.Column="2" Grid.RowSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="4*" />
+            </Grid.RowDefinitions>
+            
+            <Rectangle Grid.RowSpan="3" Style="{StaticResource Friend }" />
+            <Rectangle Grid.Row="0" Style="{StaticResource Professor}">
+                <!-- 채팅방장 이름 넣기 -->
+            </Rectangle>
+            <Rectangle Grid.Row="1" Style="{StaticResource FriendList}"  >
+
+            </Rectangle>
+        </Grid>
+    </Grid>
+
+</Window>

@@ -12,11 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using ViewTalkClient.ViewModels;
+
 namespace ViewTalkClient
 {
-    /// <summary>
-    /// Interaction logic for SettingWindow.xaml
-    /// </summary>
     public partial class SettingWindow : Window
     {
         public SettingWindow()

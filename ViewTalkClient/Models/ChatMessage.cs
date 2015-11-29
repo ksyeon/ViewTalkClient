@@ -8,12 +8,14 @@ namespace ViewTalkClient.Models
 {
     public class ChatMessage
     {
-        public int UserNumber { get; set; }
+        public bool IsNotice { get; set; }
+        public string UserNickname { get; set; }
         public string Message { get; set; }
 
-        public ChatMessage(int userNumber, string message)
+        public ChatMessage(bool isNotice, string UserNickname, string message)
         {
-            this.UserNumber = userNumber;
+            this.IsNotice = isNotice;
+            this.UserNickname = UserNickname;
             this.Message = message;
         }
     }

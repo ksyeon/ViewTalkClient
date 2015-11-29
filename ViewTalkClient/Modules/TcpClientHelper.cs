@@ -13,47 +13,79 @@ namespace ViewTalkClient.Modules
         private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
-        public int UserNumber { get; set; }
+        private JsonHelper json;
+
+        public UserData User { get; set; }
+        public int ChatNumber { get; set; }
 
         public delegate void MessageDelegate(TcpMessage message);
         public MessageDelegate ExecuteMessage { get; set; }        
 
         public TcpClientHelper() : base(ServerIP, ServerPort)
         {
-
+            this.json = new JsonHelper();
+            this.User = new UserData();
         }
 
         public void RequestLogin(string id, string password)
         {
             TcpMessage message = new TcpMessage();
 
-            JsonHelper json = new JsonHelper();
-
             message.Command = Command.Login;
-            message.Message = json.GetLoginInfo(id, password);
+            message.Message = json.SetLoginInfo(id, password);
 
             SendMessage(message);
         }
 
-        public void RequestConnect()
+        public void RequestLogout()
         {
             TcpMessage message = new TcpMessage();
 
-            message.Command = Command.Connect;
-            message.Number = UserNumber;
+            message.Command = Command.Logout;
+            message.UserNumber = User.Number;
 
             SendMessage(message);
         }
 
-        public void RequestChatting(string chatting)
+        public void RequestCreateChatting()
         {
             TcpMessage message = new TcpMessage();
 
-            message.Command = Command.Message;
-            message.Number = UserNumber;
-            message.Message = chatting;
+            message.Command = Command.CreateChatting;
+            message.UserNumber = User.Number;
 
             SendMessage(message);
+
+        }
+
+        public void RequestJoinChatting(string nickname)
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.JoinChatting;
+            message.UserNumber = User.Number;
+            message.Message = nickname;
+
+            SendMessage(message);
+
+        }
+
+        public void RequestJoinUser()
+        {
+
+        }
+
+        public void RequestSendChat(int chatNumber, string chatMessage)
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.SendChat ;
+            message.UserNumber = User.Number;
+            message.ChatNumber = chatNumber;
+            message.Message = chatMessage;
+
+            SendMessage(message);
+
         }
 
         public override void ResponseMessage(TcpMessage message)

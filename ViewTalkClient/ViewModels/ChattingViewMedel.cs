@@ -8,90 +8,165 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 using ViewTalkClient.Models;
+using ViewTalkClient.Modules;
 using System.Windows.Input;
 
 namespace ViewTalkClient.ViewModels
 {
     public class ChattingViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ChatMessage> Chatting { get; set; }
-        public ObservableCollection<int> Participant { get; set; }
+        private TcpClientHelper tcpClient;
 
-        private string _chattingMessage;
-        public string ChattingMessage
+        private int chatNumber;
+        private bool isTeacher;
+
+        public ObservableCollection<UserData> Users { get; set; }
+        public ObservableCollection<ChatMessage> UserChat { get; set; }
+        public ObservableCollection<ChatMessage> TeacherChat { get; set; }
+        // PPTData
+
+        private string _chatMessage;
+        public string ChatMessage
         {
-            get { return _chattingMessage; }
-            set { _chattingMessage = value; OnNotifyPropertyChanged("ChattingMessage"); }
+            get { return _chatMessage; }
+            set { _chatMessage = value; OnNotifyPropertyChanged("ChatMessage"); }
         }
 
         public ICommand ClickSendChat
         {
-            get { return new DelegateCommand(new Action(CommandSendChat), null); }
+            get { return new DelegateCommand(param => CommandSendChat()); }
         }
 
-        public ChattingViewModel()
+        public ChattingViewModel(TcpClientHelper tcpClient)
         {
-            this.Participant = new ObservableCollection<int>();
-            this.Chatting = new ObservableCollection<ChatMessage>();
+            this.tcpClient = tcpClient;
+            tcpClient.ExecuteMessage = ResponseMessage;
 
-            this.ChattingMessage = string.Empty;
+            this.chatNumber = tcpClient.ChatNumber;
+            this.isTeacher = tcpClient.User.IsTeacher;
 
-            App.TcpClient.ExecuteMessage = ResponseMessage;
-            App.TcpClient.RequestConnect();
+            this.Users = new ObservableCollection<UserData>();
+            this.UserChat = new ObservableCollection<ChatMessage>();
+            this.TeacherChat = new ObservableCollection<ChatMessage>();
+
+            this.ChatMessage = string.Empty;
+
+            InitializeChatting();
+        }
+
+        public void CommandSendChat()
+        {
+            if (ChatMessage.Length > 0)
+            {
+                AddChatMessage(tcpClient.User.Number, ChatMessage);
+
+                tcpClient.RequestSendChat(chatNumber, ChatMessage);
+
+                ChatMessage = "";
+            }
+        }
+
+        public void CommandCloseChatting()
+        {
+
+        }
+
+        public void CommandLoadPPT()
+        {
+
+        }
+
+        public void CommandMovePPT()
+        {
+
+        }
+
+        public void CommandClosePPT()
+        {
+
+        }
+
+        public void InitializeChatting()
+        {
+            // 방장/참여자 정보 가져오기
+            // PPT 가져오기
+
+            if (tcpClient.User.IsTeacher)
+            {
+                chatNumber = tcpClient.User.Number;
+            }
+            else
+            {
+                tcpClient.RequestJoinUser();
+            }
         }
 
         public void ResponseMessage(TcpMessage message)
         {
-            string notice = string.Empty;
-
             switch (message.Command)
             {
-                case Command.Connect:
-                    notice = message.Number + " 님이 입장하셨습니다.";
+                case Command.JoinUser:
+                    AddUser(new UserData(message.UserNumber, message.Message, false));
+                    break;
 
-                    App.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        Participant.Add(message.Number);
-                        Chatting.Add(new ChatMessage(message.Number, notice));
-                    });
+                case Command.ExitUser:
+                    break;
+
+                case Command.SendChat:
+                    if(chatNumber == message.UserNumber)
+                    AddChatMessage(message.UserNumber, message.Message);
 
                     break;
 
-                case Command.Close:
-                    notice = message.Number + " 님이 퇴장하셨습니다.";
-
-                    App.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        Participant.Remove(message.Number);
-                        Chatting.Add(new ChatMessage(message.Number, notice));
-                    });
-
+                case Command.LoadPPT:
                     break;
 
-                case Command.Message:
-                    App.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        Chatting.Add(new ChatMessage(message.Number, message.Message));
-                    });
-
+                case Command.MovePPT:
                     break;
 
-                case Command.Update:
-
+                case Command.ClosePPT:
                     break;
             }
         }
 
-        private void CommandSendChat()
+        private void AddUser(UserData user)
         {
-            if (ChattingMessage.Length > 0)
+            string notice = user.Nickname + " 님이 입장하셨습니다.";
+
+            App.Current.Dispatcher.InvokeAsync(() =>
             {
-                Chatting.Add(new ChatMessage(App.TcpClient.UserNumber, ChattingMessage));
+                Users.Add(user);
+                UserChat.Add(new ChatMessage(true, user.Nickname, notice));
+            });
+        }
 
-                App.TcpClient.RequestChatting(ChattingMessage);
+        private void Delete(UserData user)
+        {
+            string notice = user.Nickname + " 님이 퇴장하셨습니다.";
 
-                ChattingMessage = "";
-            }
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                Users.Remove(user);
+                UserChat.Add(new ChatMessage(true, user.Nickname, notice));
+            });
+        }
+
+        private void AddChatMessage(int userNumber, string message)
+        {
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                UserData SendChatUser = Users.First(x => (x.Number == userNumber));
+
+                if (SendChatUser != null)
+                {
+                    UserChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
+
+                    if (SendChatUser.IsTeacher)
+                    {
+                        TeacherChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
+                    }
+                }
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

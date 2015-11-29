@@ -5,8 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ViewTalkClient"
         mc:Ignorable="d"
-        Title="SettingWindow" Height="300" Width="300">
-    <Grid>
-        
+        Title="View Talk" Height="500" Width="350">
+
+    <Window.DataContext>
+        <Binding Path="SettingViewModel" Source="{StaticResource ViewModelLocator}" />
+    </Window.DataContext>
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="50*" />
+        </Grid.RowDefinitions>
+
+        <Button Content="Logout" Grid.Row="0" Grid.Column="0" Style="{StaticResource LogoutButtonStyle}" />
+
+        <Image Source="/Resources/Logo.png" Width="200" Height="200" Grid.Row="1"/>
+
+        <Grid Background="{StaticResource BackgroundColor}" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*" />
+                <RowDefinition Height="40*" />
+                <RowDefinition Height="30*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="150*" />
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*" />
+                <ColumnDefinition Width="50*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Text="{Binding Path=TecherNickName}" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" FontSize="14" Style="{StaticResource IDTextStyle}" />
+
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickJoinChatting}">
+                <Image Source="/Resources/JoinChatting.png" Margin="5,5,5,5"/>
+            </Button>
+
+            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickCreateChatting}">
+                <Image Source="/Resources/CreateChatting.png" Margin="5,5,5,5" />
+            </Button>
+        </Grid>
     </Grid>
 </Window>

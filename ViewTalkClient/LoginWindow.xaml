@@ -4,11 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ViewTalkClient"
-        xmlns:views="clr-namespace:ViewTalkClient.Views"
         mc:Ignorable="d"
-        Title="WakeUp! Messanger" Width="350" Height="500">
+        Title="View Talk" Height="500" Width="350">
 
-    <Grid>
-        <views:LoginView />
+    <Window.DataContext>
+        <Binding Path="LoginViewModel" Source="{StaticResource ViewModelLocator}" />
+    </Window.DataContext>
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="50*" />
+        </Grid.RowDefinitions>
+
+        <Image Source="/Resources/Logo.png" Width="200" Height="200" Grid.Row="1"/>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85*" />
+                <ColumnDefinition Width="180*" />
+                <ColumnDefinition Width="85*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*" />
+                <RowDefinition Height="30*" />
+                <RowDefinition Height="40*" />
+            </Grid.RowDefinitions>
+
+            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextStyle}" />
+
+            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordStyle}" />
+
+            <Button Content="Login" Grid.Row="2" Grid.Column="1" Style="{StaticResource LoginButtonStyle}" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
+        </Grid>
     </Grid>
 </Window>

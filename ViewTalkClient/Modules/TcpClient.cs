@@ -14,6 +14,7 @@ namespace ViewTalkClient.Modules
     public abstract class TcpClient
     {
         private Socket clientSocket;
+
         private string serverIP;
         private int serverPort;
 
