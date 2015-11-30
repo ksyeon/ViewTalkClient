@@ -10,7 +10,7 @@ namespace ViewTalkClient.Modules
 {
     public class TcpClientHelper : TcpClient
     {
-        private const string ServerIP = "127.0.0.1";
+        private const string ServerIP = "183.109.83.66";
         private const int ServerPort = 8080;
 
         private JsonHelper json;
@@ -92,6 +92,29 @@ namespace ViewTalkClient.Modules
 
             SendMessage(message);
 
+        }
+
+        public void RequestSendPPT(PPTData ppt)
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.SendPPT;
+            message.UserNumber = User.Number;
+            message.ChatNumber = ChatNumber;
+            message.PPT = ppt;
+
+            SendMessage(message);
+        }
+
+        public void RequestClosePPT()
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.ClosePPT;
+            message.UserNumber = User.Number;
+            message.ChatNumber = ChatNumber;
+
+            SendMessage(message);
         }
 
         public override void ResponseMessage(TcpMessage message)

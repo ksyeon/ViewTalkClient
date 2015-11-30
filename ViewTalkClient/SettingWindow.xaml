@@ -39,11 +39,11 @@
 
             <TextBox Text="{Binding Path=TecherNickname}" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" FontSize="14" Style="{StaticResource IDTextBoxStyle}" />
 
-            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickJoinChatting}">
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource SettingButtonStyle}" Command="{Binding Path=ClickJoinChatting}">
                 <Image Source="/Resources/JoinChatting.png" Margin="5,5,5,5"/>
             </Button>
 
-            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource ChattingButtonStyle}" Command="{Binding Path=ClickCreateChatting}">
+            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource SettingButtonStyle}" Command="{Binding Path=ClickCreateChatting}">
                 <Image Source="/Resources/CreateChatting.png" Margin="5,5,5,5" />
             </Button>
         </Grid>

@@ -115,6 +115,8 @@ namespace ViewTalkClient.ViewModels
                         // Close();
                     });
 
+                    TecherNickname = string.Empty;
+
                     break;
 
                 case 1:

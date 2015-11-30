@@ -38,18 +38,26 @@ namespace ViewTalkClient.Models
             ResetPPT();
         }
 
-        public void LoadPPT(List<byte[]> bytePPT)
+        public void OpenPPT(List<byte[]> bytePPT)
         {
             BytePPT = bytePPT;
             CurrentPPT = bytePPT[0];
-            CurrentPage = 0;
-            LastPage = bytePPT.Count - 1;
+            CurrentPage = 1;
+            LastPage = bytePPT.Count;
+        }
+
+        public void LoadPPT(List<byte[]> bytePPT, int currentPage)
+        {
+            BytePPT = bytePPT;
+            CurrentPPT = bytePPT[currentPage - 1];
+            CurrentPage = currentPage;
+            LastPage = bytePPT.Count;
         }
 
         public void ResetPPT()
         {
             BytePPT = new List<byte[]>();
-            CurrentPPT = new byte[0]; // 수정
+            CurrentPPT = new byte[0];
             CurrentPage = 0;
             LastPage = 0;
         }

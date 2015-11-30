@@ -31,7 +31,8 @@ namespace ViewTalkClient.Modules
             {
                 string imagePath = string.Format(@"C:\Users\Serenity\Desktop\PPT\temp_{0:000}.jpg", i);
 
-                presentation.Slides[i + 1].Export(imagePath, "JPG", (int)presentation.Slides[i + 1].Master.Width, (int)presentation.Slides[i + 1].Master.Height);
+                //presentation.Slides[i + 1].Export(imagePath, "JPG", (int)presentation.Slides[i + 1].Master.Width, (int)presentation.Slides[i + 1].Master.Height);
+                presentation.Slides[i + 1].Export(imagePath, "JPG", 320, 240);
 
                 result.Add(ImageToByte(imagePath));
             }

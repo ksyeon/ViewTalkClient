@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Win32;
@@ -23,7 +24,12 @@ namespace ViewTalkClient.ViewModels
         public ObservableCollection<ChatMessage> UserChat { get; set; }
         public ObservableCollection<ChatMessage> TeacherChat { get; set; }
 
-        public PPTData PPT { get; set; }
+        private PPTData _ppt;
+        public PPTData PPT
+        {
+            get { return _ppt; }
+            set { _ppt = value; OnNotifyPropertyChanged("PPT"); }
+        }
 
         private string _chatMessage;
         public string ChatMessage
@@ -37,9 +43,9 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandSendChat()); }
         }
 
-        public ICommand ClickLoadPPT
+        public ICommand ClickOpenPPT
         {
-            get { return new DelegateCommand(param => CommandLoadPPT()); }
+            get { return new DelegateCommand(param => CommandOpenPPT()); }
         }
 
         public ICommand ClickLeftPPT
@@ -82,50 +88,74 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandCloseChatting()
         {
-            // 이전 윈도우
+            // Close();
         }
 
-        public void CommandLoadPPT()
+        public void CommandOpenPPT()
         {
-            OpenFileDialog openFile = new OpenFileDialog();
-
-            openFile.DefaultExt = "pptx";
-            openFile.Filter = "PowerPoint 프레젠테이션 (*.pptx;*.ppt)|*.pptx;*.ppt";
-
-            openFile.ShowDialog();
-
-            if (openFile.FileName.Length > 0)
+            if (tcpClient.User.IsTeacher)
             {
-                PowerPoint powerPoint = new PowerPoint();
+                if(PPT.LastPage == 0)
+                {
+                    OpenFileDialog openFile = new OpenFileDialog();
 
-                List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
-                PPT.LoadPPT(bytePPT);
+                    openFile.DefaultExt = "pptx";
+                    openFile.Filter = "PowerPoint 프레젠테이션 (*.pptx;*.ppt)|*.pptx;*.ppt";
+
+                    openFile.ShowDialog();
+
+                    if (openFile.FileName.Length > 0)
+                    {
+                        PowerPoint powerPoint = new PowerPoint();
+
+                        List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
+                        PPT.OpenPPT(bytePPT);
+
+                        tcpClient.RequestSendPPT(PPT);
+                    }
+                }
+                else
+                {
+                    PPT.ResetPPT();
+
+                    tcpClient.RequestClosePPT();
+                }
+            }
+            else
+            {
+                MessageBox.Show("강사만 클릭할 수 있습니다.", AppConst.AppName);
             }
         }
 
         public void CommandMovePPT(int direction)
         {
-            switch (direction)
+            if (tcpClient.User.IsTeacher)
             {
-                case 0: // Left
-                    if (PPT.CurrentPage - 1 >= 0)
-                    {
-                        PPT.CurrentPPT = PPT.BytePPT[--PPT.CurrentPage];
-                    }
-                    break;
+                switch (direction)
+                {
+                    case 0: // Left
+                        if (PPT.CurrentPage > 1)
+                        {
+                            PPT.CurrentPPT = PPT.BytePPT[(--PPT.CurrentPage) - 1];
 
-                case 1: // Right
-                    if (PPT.CurrentPage + 1 <= PPT.LastPage)
-                    {
-                        PPT.CurrentPPT = PPT.BytePPT[++PPT.CurrentPage];
-                    }
-                    break;
+                            tcpClient.RequestSendPPT(PPT);
+                        }
+                        break;
+
+                    case 1: // Right
+                        if (PPT.CurrentPage < PPT.LastPage)
+                        {
+                            PPT.CurrentPPT = PPT.BytePPT[(++PPT.CurrentPage) - 1];
+
+                            tcpClient.RequestSendPPT(PPT);
+                        }
+                        break;
+                }
             }
-        }
-
-        public void CommandClosePPT()
-        {
-            PPT.ResetPPT();
+            else
+            {
+                MessageBox.Show("강사만 클릭할 수 있습니다.", AppConst.AppName);
+            }
         }
 
         public void InitializeChatting()
@@ -152,7 +182,7 @@ namespace ViewTalkClient.ViewModels
                             break;
 
                         case 1:
-                            updateChatting(message.Message);
+                            UpdateChatting(message.Message);
                             break;
                     }
                     break;
@@ -164,18 +194,17 @@ namespace ViewTalkClient.ViewModels
                     AddChatMessage(message.UserNumber, message.Message);
                     break;
 
-                case Command.LoadPPT:
-                    break;
-
-                case Command.MovePPT:
+                case Command.SendPPT:
+                    LoadPPT(message.PPT);
                     break;
 
                 case Command.ClosePPT:
+                    ClosePPT();
                     break;
             }
         }
 
-        private void updateChatting(string message)
+        private void UpdateChatting(string message)
         {
             JsonHelper json = new JsonHelper();
 
@@ -214,7 +243,7 @@ namespace ViewTalkClient.ViewModels
         {
             App.Current.Dispatcher.InvokeAsync(() =>
             {
-                UserData SendChatUser = Users.First(x => (x.Number == userNumber)); // 예외
+                UserData SendChatUser = Users.First(x => (x.Number == userNumber)); // ArgumentNullException
 
                 UserChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
 
@@ -223,6 +252,16 @@ namespace ViewTalkClient.ViewModels
                     TeacherChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
                 }
             });
+        }
+
+        private void LoadPPT(PPTData ppt)
+        {
+            PPT = ppt;
+        }
+
+        private void ClosePPT()
+        {
+            PPT.ResetPPT();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
