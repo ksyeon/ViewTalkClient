@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ViewTalkClient"
         xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
-        Title="View Talk" Width="900" Height="500">
+        Title="View Talk" Width="900" Height="600">
 
     <Window.DataContext>
         <Binding Path="ChattingViewModel" Source="{StaticResource ViewModelLocator}" />
@@ -14,20 +14,20 @@
 
     <Grid Background="{StaticResource BackgroundColor}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350*" />
             <ColumnDefinition Width="400*" />
+            <ColumnDefinition Width="350*" />
             <ColumnDefinition Width="150*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="320*" />
-            <RowDefinition Height="80*" />
+            <RowDefinition Height="380*" />
+            <RowDefinition Height="120*" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
 
         <!-- PPT Viewer -->
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="300*" />
+                <RowDefinition Height="350*" />
                 <RowDefinition Height="50*" />
             </Grid.RowDefinitions>
 
