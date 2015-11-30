@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="ApplicationColor" Color="#025E73" />
     <SolidColorBrush x:Key="BackgroundColor" Color="White" />
     <SolidColorBrush x:Key="TeacherColor" Color="#4CEA9F3C"/>
-    <SolidColorBrush x:Key="StudentColor" Color="#19025E73" />
+    <SolidColorBrush x:Key="UserColor" Color="#19025E73" />
 
         <!-- Style -->
     <Style x:Key="IDTextBoxStyle" TargetType="TextBox">
@@ -28,7 +28,7 @@
         <Setter Property="Foreground" Value="{StaticResource BackgroundColor}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Margin" Value="0,5,0,5" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
@@ -49,7 +49,7 @@
         <Setter Property="Margin" Value="5,5,5,5"/>
     </Style>
 
-    <Style x:Key="ChattingBorderStyle" TargetType="Border" >
+    <Style x:Key="ChattingBorderStyle" TargetType="Border">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}"/>
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Margin" Value="10,10,10,10" />
@@ -75,14 +75,32 @@
         <Setter Property="Margin" Value="0,0,10,10" />
     </Style>
 
-    <Style x:Key="UserRectangleStyle" TargetType="Rectangle" >
+    <Style x:Key="TeacherRectangleStyle" TargetType="Rectangle">
+        <Setter Property="Fill" Value="{StaticResource TeacherColor}" />
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
         <Setter Property="StrokeThickness" Value="2" />
         <Setter Property="RadiusX" Value="10" />
         <Setter Property="RadiusY" Value="10" />
+        <Setter Property="Margin" Value="10,10,10,10" />
     </Style>
 
-    <Style x:Key="TeacherTextBlockStyle" TargetType="TextBlock" >
+    <Style x:Key="UserRectangleStyle" TargetType="Rectangle">
+        <Setter Property="Fill" Value="{StaticResource UserColor}" />
+        <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="RadiusX" Value="10" />
+        <Setter Property="RadiusY" Value="10" />
+        <Setter Property="Margin" Value="10,0,10,0" />
+    </Style>
+
+    <Style x:Key="UserListBoxStyle" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="15,5,15,5" />
+    </Style>
+
+    <Style x:Key="TeacherTextBlockStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource ApplicationColor}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -90,7 +108,7 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style x:Key="StudentTextBlockStyle" TargetType="TextBlock" >
+    <Style x:Key="StudentTextBlockStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource ApplicationColor}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -98,12 +116,12 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style x:Key="PptControlButtonStyle" TargetType="Button" >
+    <Style x:Key="PPTControlButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
 
-    <Style x:Key="PptPageTextBlockStyle" TargetType="TextBlock" >
+    <Style x:Key="PPTPageTextBlockStyle" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource ApplicationColor}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />

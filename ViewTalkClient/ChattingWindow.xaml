@@ -46,21 +46,21 @@
                         <ColumnDefinition Width="15*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0" Margin="15,3,15,3" Style="{StaticResource PptControlButtonStyle}" Command="{Binding Path=ClickOpenPPT}">
+                    <Button Grid.Column="0" Margin="15,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickOpenPPT}">
                         <Image Source="/Resources/PPTLoad.png" />
                     </Button>
 
-                    <Button Grid.Column="2" Margin="15,3,0,3" Style="{StaticResource PptControlButtonStyle}" Command="{Binding Path=ClickLeftPPT}">
+                    <Button Grid.Column="2" Margin="15,3,0,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickLeftPPT}">
                         <Image Source="/Resources/PPTLeft.png" />
                     </Button>
 
-                    <Button Grid.Column="3" Margin="0,3,15,3" Style="{StaticResource PptControlButtonStyle}" Command="{Binding Path=ClickRightPPT}">
+                    <Button Grid.Column="3" Margin="0,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickRightPPT}">
                         <Image Source="/Resources/PPTRight.png" />
                     </Button>
                 </Grid>
             </Border>
 
-            <TextBlock Grid.Row="1" Style="{StaticResource PptPageTextBlockStyle}">
+            <TextBlock Grid.Row="1" Style="{StaticResource PPTPageTextBlockStyle}">
                 <Run Text="{Binding Path=PPT.CurrentPage}" />
                 <Run Text=" / " />
                 <Run Text="{Binding Path=PPT.LastPage}" />
@@ -111,11 +111,11 @@
                     <RowDefinition Height="85*" />
                 </Grid.RowDefinitions>
 
-                <Rectangle Fill="{StaticResource TeacherColor}" Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource UserRectangleStyle}" />
+                <Rectangle Grid.Row="0" Style="{StaticResource TeacherRectangleStyle}" />
                 <TextBlock Text="{Binding Path=Users[0].Nickname}" Grid.Row="0" Style="{StaticResource TeacherTextBlockStyle}" />
 
-                <Rectangle Fill="{StaticResource StudentColor}" Grid.Row="1" Margin="10,0,10,0" Style="{StaticResource UserRectangleStyle}" />
-                <ListBox Background="{StaticResource StudentColor}" HorizontalContentAlignment="Center" BorderThickness="0" ItemsSource="{Binding Path=Users}" Grid.Row="1" Margin="15,5,15,5">
+                <Rectangle Grid.Row="1" Style="{StaticResource UserRectangleStyle}" />
+                <ListBox ItemsSource="{Binding Path=Users}" Grid.Row="1" Style="{StaticResource UserListBoxStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=Nickname}" Style="{StaticResource StudentTextBlockStyle}" />
