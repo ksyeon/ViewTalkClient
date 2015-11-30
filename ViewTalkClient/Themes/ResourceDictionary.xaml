@@ -11,6 +11,7 @@
     <Style x:Key="IDTextBoxStyle" TargetType="TextBox">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,5,0,5" />
         <Setter Property="MaxLength" Value="12" />
     </Style>

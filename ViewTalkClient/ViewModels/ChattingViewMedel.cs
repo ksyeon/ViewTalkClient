@@ -190,7 +190,7 @@ namespace ViewTalkClient.ViewModels
                             break;
 
                         case 1:
-                            UpdateChatting(message.Message);
+                            UpdateChatting(message.ChatNumber, message.Message);
                             break;
                     }
                     break;
@@ -212,11 +212,11 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
-        private void UpdateChatting(string message)
+        private void UpdateChatting(int chatNumbet, string message)
         {
             JsonHelper json = new JsonHelper();
 
-            List<UserData> userList = json.GetChattingInfo(message);
+            List<UserData> userList = json.GetChattingInfo(chatNumbet, message);
             Users = new ObservableCollection<UserData>(userList);
 
             // PPT 불러오기

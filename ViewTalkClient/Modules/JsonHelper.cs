@@ -27,23 +27,30 @@ namespace ViewTalkClient.Modules
             return result.ToString();
         }
 
-        public List<UserData> GetChattingInfo(string data)
+        public List<UserData> GetChattingInfo(int chatNumber, string message)
         {
             List<UserData> result = new List<UserData>();
 
-            JsonParser jsonParser = new JsonParser(data);
+            JsonParser jsonParser = new JsonParser(message);
 
-            string[] userNumber = jsonParser.GetStringArrayValue(JsonName.UserNumber);
-            string[] nickname = jsonParser.GetStringArrayValue(JsonName.Nickname);
+            string[] jsonUserNumber = jsonParser.GetStringArrayValue(JsonName.UserNumber);
+            string[] jsonNickname = jsonParser.GetStringArrayValue(JsonName.Nickname);
 
-            for(int i = 0; i < userNumber.Length; i++)
+            for(int i = 0; i < jsonUserNumber.Length; i++)
             {
-                int number = Convert.ToInt32(userNumber[i]);
-                bool isTeacher = false;
+                int userNumber = Convert.ToInt32(jsonUserNumber[i]);
+                string nickname = jsonNickname[i];
 
-                if ( i == 0 ) isTeacher = true;
+                if (chatNumber == userNumber) // Teacher
+                {
+                    result.Insert(0, new UserData { Number = userNumber, Nickname = nickname, IsTeacher = true });
+                }
+                else // Student
+                {
+                    result.Add(new UserData { Number = userNumber, Nickname = nickname, IsTeacher = false });
+                }
 
-                result.Add(new UserData { Number = number, Nickname = nickname[i], IsTeacher = isTeacher });
+                
             }
 
             return result;
