@@ -82,7 +82,7 @@ namespace ViewTalkClient.ViewModels
 
                 tcpClient.RequestSendChat(ChatMessage);
 
-                ChatMessage = "";
+                ChatMessage = string.Empty;
             }
         }
 
@@ -109,9 +109,17 @@ namespace ViewTalkClient.ViewModels
                         PowerPoint powerPoint = new PowerPoint();
 
                         List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
-                        PPT.OpenPPT(bytePPT);
 
-                        tcpClient.RequestSendPPT(PPT);
+                        if(bytePPT.Count > 0)
+                        {
+                            PPT.OpenPPT(bytePPT);
+
+                            tcpClient.RequestSendPPT(PPT);
+                        }
+                        else
+                        {
+                            MessageBox.Show("PPT를 불러오는 데 실패했습니다.", AppConst.AppName);
+                        }
                     }
                 }
                 else
@@ -123,7 +131,7 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                MessageBox.Show("강사만 클릭할 수 있습니다.", AppConst.AppName);
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
             }
         }
 
@@ -154,7 +162,7 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                MessageBox.Show("강사만 클릭할 수 있습니다.", AppConst.AppName);
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
             }
         }
 
@@ -209,7 +217,6 @@ namespace ViewTalkClient.ViewModels
             JsonHelper json = new JsonHelper();
 
             List<UserData> userList = json.GetChattingInfo(message);
-
             Users = new ObservableCollection<UserData>(userList);
 
             // PPT 불러오기

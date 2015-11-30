@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ViewTalkClient"
+        xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
         Title="View Talk" Height="500" Width="350">
 
@@ -19,13 +20,13 @@
             <RowDefinition Height="50*" />
         </Grid.RowDefinitions>
 
-        <Image Source="/Resources/Logo.png" Width="200" Height="200" Grid.Row="1"/>
+        <Image Source="/Resources/Logo.png" Width="180" Height="180" Grid.Row="1"/>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85*" />
-                <ColumnDefinition Width="180*" />
-                <ColumnDefinition Width="85*" />
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="150*" />
+                <ColumnDefinition Width="100*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30*" />
@@ -33,9 +34,9 @@
                 <RowDefinition Height="40*" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextBoxStyle}" />
+            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickLogin}" />
 
-            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" />
+            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickLogin}" />
 
             <Button Content="Login" Grid.Row="2" Grid.Column="1" Style="{StaticResource LoginButtonStyle}" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
         </Grid>

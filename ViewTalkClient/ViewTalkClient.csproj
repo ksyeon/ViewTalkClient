@@ -65,6 +65,8 @@
     <Compile Include="ChattingWindow.xaml.cs">
       <DependentUpon>ChattingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extenders\ListBoxAutoScroll.cs" />
+    <Compile Include="Extenders\TextBoxEnterKey.cs" />
     <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\PPTData.cs" />
     <Compile Include="Models\TcpMessage.cs" />

@@ -25,20 +25,35 @@ namespace ViewTalkClient.Modules
         {
             List<byte[]> result = new List<byte[]>();
 
-            Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            try
+            { 
+                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
 
-            for (int i = 0; i < presentation.Slides.Count; i++)
-            {
-                string imagePath = string.Format(@"C:\Users\Serenity\Desktop\PPT\temp_{0:000}.jpg", i);
+                for (int i = 0; i < presentation.Slides.Count; i++)
+                {
+                    string imagePath = AppDomain.CurrentDomain.BaseDirectory + @"\PPT";
 
-                //presentation.Slides[i + 1].Export(imagePath, "JPG", (int)presentation.Slides[i + 1].Master.Width, (int)presentation.Slides[i + 1].Master.Height);
-                presentation.Slides[i + 1].Export(imagePath, "JPG", 320, 240);
+                    DirectoryInfo directoryInfo = new DirectoryInfo(imagePath);
+                    if (directoryInfo.Exists == false)
+                    {
+                        directoryInfo.Create();
+                    }
 
-                result.Add(ImageToByte(imagePath));
+                    imagePath += string.Format(@"\ViewTalk_PPT_{0:000}.jpg", i);
+
+                    //presentation.Slides[i + 1].Export(imagePath, "JPG", (int)presentation.Slides[i + 1].Master.Width, (int)presentation.Slides[i + 1].Master.Height);
+                    presentation.Slides[i + 1].Export(imagePath, "JPG", 320, 240);
+
+                    result.Add(ImageToByte(imagePath));
+                }
+
+                presentation.Close();
+                application.Quit();
             }
-
-            presentation.Close();
-            application.Quit();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             return result;
         }
