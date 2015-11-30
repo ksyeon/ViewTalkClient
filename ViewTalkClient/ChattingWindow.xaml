@@ -115,14 +115,14 @@
                 <TextBlock Text="{Binding Path=Users[0].Nickname}" Grid.Row="0" Style="{StaticResource TeacherTextBlockStyle}" />
 
                 <Rectangle Fill="{StaticResource StudentColor}" Grid.Row="1" Margin="10,0,10,0" Style="{StaticResource UserRectangleStyle}" />
-                <ListView Background="{StaticResource StudentColor}" HorizontalContentAlignment="Center" BorderThickness="0" ItemsSource="{Binding Path=Users}" Grid.Row="1" Margin="15,5,15,5">
-                    <ListView.ItemTemplate>
+                <ListBox Background="{StaticResource StudentColor}" HorizontalContentAlignment="Center" BorderThickness="0" ItemsSource="{Binding Path=Users}" Grid.Row="1" Margin="15,5,15,5">
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=Nickname}" Style="{StaticResource StudentTextBlockStyle}" />
                         </DataTemplate>
-                    </ListView.ItemTemplate>
+                    </ListBox.ItemTemplate>
 
-                </ListView>
+                </ListBox>
             </Grid>
         </Border>
     </Grid>
