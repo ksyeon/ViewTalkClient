@@ -10,11 +10,11 @@ namespace ViewTalkClient.ViewModels
 {
     public class ViewModelLocator
     {
-        private TcpClientHelper tcpClient;
+        private MessangerClient tcpClient;
 
         public ViewModelLocator()
         {
-            this.tcpClient = new TcpClientHelper();
+            this.tcpClient = new MessangerClient();
         }
 
         private LoginViewModel _loginViewModel;

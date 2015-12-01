@@ -18,7 +18,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class ChattingViewModel : INotifyPropertyChanged
     {
-        private TcpClientHelper tcpClient;
+        private MessangerClient tcpClient;
 
         public ObservableCollection<UserData> Users { get; set; }
         public ObservableCollection<ChatMessage> UserChat { get; set; }
@@ -58,7 +58,7 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandMovePPT(1)); }
         }
 
-        public ChattingViewModel(TcpClientHelper tcpClient)
+        public ChattingViewModel(MessangerClient tcpClient)
         {
             this.tcpClient = tcpClient;
             tcpClient.ExecuteMessage = ResponseMessage;
@@ -182,6 +182,9 @@ namespace ViewTalkClient.ViewModels
         {
             switch (message.Command)
             {
+                case Command.CloseChatting:
+                    break;
+
                 case Command.JoinUser:
                     switch (message.Check)
                     {
@@ -190,12 +193,13 @@ namespace ViewTalkClient.ViewModels
                             break;
 
                         case 1:
-                            UpdateChatting(message.ChatNumber, message.Message);
+                            UpdateChatting(message.ChatNumber, message.Message, message.PPT);
                             break;
                     }
                     break;
 
                 case Command.ExitUser:
+                    DeleteUser(message.UserNumber);
                     break;
 
                 case Command.SendChat:
@@ -212,19 +216,19 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
-        private void UpdateChatting(int chatNumbet, string message)
+        private void UpdateChatting(int chatNumbet, string message, PPTData ppt)
         {
             JsonHelper json = new JsonHelper();
 
             List<UserData> userList = json.GetChattingInfo(chatNumbet, message);
             Users = new ObservableCollection<UserData>(userList);
 
-            // PPT 불러오기
+            LoadPPT(ppt);
         }
 
         private void AddUser(UserData user)
         {
-            string notice = user.Nickname + " 님이 입장하셨습니다.";
+            string notice = $"'{user.Nickname}'님이 입장하셨습니다.";
 
             App.Current.Dispatcher.InvokeAsync(() =>
             {
@@ -234,9 +238,11 @@ namespace ViewTalkClient.ViewModels
             });
         }
 
-        private void DeleteUser(UserData user)
+        private void DeleteUser(int userNumber)
         {
-            string notice = user.Nickname + " 님이 퇴장하셨습니다.";
+            UserData user = Users.First(x => (x.Number == userNumber)); // ArgumentNullException
+
+            string notice = $"'{user.Nickname}'님이 퇴장하셨습니다.";
 
             App.Current.Dispatcher.InvokeAsync(() =>
             {
@@ -250,13 +256,13 @@ namespace ViewTalkClient.ViewModels
         {
             App.Current.Dispatcher.InvokeAsync(() =>
             {
-                UserData SendChatUser = Users.First(x => (x.Number == userNumber)); // ArgumentNullException
+                UserData user = Users.First(x => (x.Number == userNumber)); // ArgumentNullException
 
-                UserChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
+                UserChat.Add(new ChatMessage(false, user.Nickname, message));
 
-                if (SendChatUser.IsTeacher)
+                if (user.IsTeacher)
                 {
-                    TeacherChat.Add(new ChatMessage(false, SendChatUser.Nickname, message));
+                    TeacherChat.Add(new ChatMessage(false, user.Nickname, message));
                 }
             });
         }

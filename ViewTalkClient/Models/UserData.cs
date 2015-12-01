@@ -4,12 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.ComponentModel;
+
 namespace ViewTalkClient.Models
 {
-    public class UserData
+    public class UserData : INotifyPropertyChanged
     {
         public int Number { get; set; }
-        public string Nickname { get; set; }
+
+        private string _nickname;
+        public string Nickname
+        {
+            get { return _nickname; }
+            set { _nickname = value; OnNotifyPropertyChanged("Nickname"); }
+        }
+
         public bool IsTeacher { get; set; }
 
         public UserData() : this(0, string.Empty, false)
@@ -22,6 +31,15 @@ namespace ViewTalkClient.Models
             this.Number = number;
             this.Nickname = nickname;
             this.IsTeacher = IsTeacher;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnNotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

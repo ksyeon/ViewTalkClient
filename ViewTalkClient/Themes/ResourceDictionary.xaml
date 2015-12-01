@@ -90,7 +90,7 @@
         <Setter Property="StrokeThickness" Value="2" />
         <Setter Property="RadiusX" Value="10" />
         <Setter Property="RadiusY" Value="10" />
-        <Setter Property="Margin" Value="10,0,10,0" />
+        <Setter Property="Margin" Value="10,0,10,10" />
     </Style>
 
     <Style x:Key="UserListBoxStyle" TargetType="ListBox">

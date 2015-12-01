@@ -8,7 +8,7 @@ using ViewTalkClient.Models;
 
 namespace ViewTalkClient.Modules
 {
-    public class TcpClientHelper : TcpClient
+    public class MessangerClient : TcpClient
     {
         private const string ServerIP = "183.109.83.66";
         private const int ServerPort = 8080;
@@ -21,7 +21,7 @@ namespace ViewTalkClient.Modules
         public delegate void MessageDelegate(TcpMessage message);
         public MessageDelegate ExecuteMessage { get; set; }        
 
-        public TcpClientHelper() : base(ServerIP, ServerPort)
+        public MessangerClient() : base(ServerIP, ServerPort)
         {
             this.json = new JsonHelper();
             this.User = new UserData();

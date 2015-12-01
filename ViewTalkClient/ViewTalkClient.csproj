@@ -75,7 +75,7 @@
     <Compile Include="Modules\JsonParser.cs" />
     <Compile Include="Modules\PowerPoint.cs" />
     <Compile Include="Modules\TcpClient.cs" />
-    <Compile Include="Modules\TcpClientHelper.cs" />
+    <Compile Include="Modules\MessangerClient.cs" />
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>

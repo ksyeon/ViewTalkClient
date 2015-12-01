@@ -15,7 +15,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class SettingViewModel : INotifyPropertyChanged
     {
-        private TcpClientHelper tcpClient;
+        private MessangerClient tcpClient;
 
         private string _teacherNickname;
         public string TecherNickname
@@ -39,7 +39,7 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandLogout()); }
         }
 
-        public SettingViewModel(TcpClientHelper tcpClient)
+        public SettingViewModel(MessangerClient tcpClient)
         {
             this.tcpClient = tcpClient;
             tcpClient.ExecuteMessage = ResponseMessage;

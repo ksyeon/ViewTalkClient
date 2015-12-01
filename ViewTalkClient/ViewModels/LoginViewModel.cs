@@ -15,7 +15,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
-        private TcpClientHelper tcpClient;
+        private MessangerClient tcpClient;
 
         private string _id;
         public string ID
@@ -29,7 +29,7 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandLogin("1234")); }
         }
 
-        public LoginViewModel(TcpClientHelper tcpClient)
+        public LoginViewModel(MessangerClient tcpClient)
         {
             this.tcpClient = tcpClient;
             this.tcpClient.ExecuteMessage = ResponseMessage;
