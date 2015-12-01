@@ -30,9 +30,9 @@ namespace ViewTalkClient.Models
 
         public UserData(int number, string nickname, bool isTeacher)
         {
-            this.Number = number;
-            this.Nickname = nickname;
-            this.IsTeacher = IsTeacher;
+            Number = number;
+            Nickname = nickname;
+            IsTeacher = IsTeacher;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace ViewTalkClient.Modules
 
         public JsonParser(string jsonData)
         {
-            this.jsonTextParser = new JsonTextParser();
-            this.jsonObjectCollection = (JsonObjectCollection)jsonTextParser.Parse(jsonData);
+            jsonTextParser = new JsonTextParser();
+            jsonObjectCollection = (JsonObjectCollection)jsonTextParser.Parse(jsonData);
         }
 
         public string GetStringValue(string name)

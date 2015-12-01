@@ -17,11 +17,13 @@ namespace ViewTalkClient.Services
 
         public MessangerService()
         {
-            this.messanger = new MessangerClient();
+            messanger = new MessangerClient();
         }
 
-        public MessangerClient GetMessanger()
+        public MessangerClient GetMessanger(Action<TcpMessage> execute)
         {
+            messanger.ExecuteMessage = execute;
+
             return messanger;
         }
     }

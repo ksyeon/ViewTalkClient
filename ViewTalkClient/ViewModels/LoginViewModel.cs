@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
@@ -18,7 +19,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private MessangerClient messanger;
+        public MessangerClient Messanger { get; set; }
 
         private string _id;
         public string ID
@@ -27,56 +28,37 @@ namespace ViewTalkClient.ViewModels
             set { _id = value; RaisePropertyChanged("ID"); }
         }
 
-        public ICommand ClickLogin
+        public LoginViewModel(IMessangerService messangerService)
         {
-            get { return new DelegateCommand(param => CommandLogin("1234")); }
+            Messanger = messangerService.GetMessanger(ResponseMessage);
+
+            ID = string.Empty;
         }
 
-        public LoginViewModel(IMessangerService MessangerService)
+        public void ResponseMessage(TcpMessage message)
         {
-            this.messanger = MessangerService.GetMessanger();
-            messanger.ExecuteMessage = ResponseMessage;
-
-            this.ID = string.Empty;
-        }
-
-        private void CommandLogin(string password)
-        {
-            if (string.IsNullOrEmpty(ID))
+            switch (message.Command)
             {
-                MessageBox.Show("아이디를 입력하세요.", AppConst.AppName);
-            }
-            else if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("비밀번호를 입력하세요.", AppConst.AppName);
-            }
-            else
-            {
-                bool isSuccess = messanger.RequestLogin(ID, password);
-
-                if (!isSuccess)
-                {
-                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
-
-                    // Close();
-                }
+                case Command.Login:
+                    ValidateLogin(message.Check, message.UserNumber, message.Message);
+                    break;
             }
         }
 
-        private void ValidateLogin(int check, int userNumber, string nickname)
+        public void ValidateLogin(int check, int userNumber, string nickname)
         {
             switch (check)
             {
                 case 0:
-                    messanger.User.Number = userNumber;
-                    messanger.User.Nickname = nickname;
+                    Messanger.User.Number = userNumber;
+                    Messanger.User.Nickname = nickname;
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
                         SettingWindow settingWindow = new SettingWindow();
-                        settingWindow.ShowDialog();
-                        
-                        // Close();
+                        settingWindow.Show();
+
+                        CloseWindow();
                     });
 
                     break;
@@ -91,13 +73,45 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
-        public void ResponseMessage(TcpMessage message)
+        public void CloseWindow()
         {
-            switch (message.Command)
+            App.Current.Dispatcher.InvokeAsync(() =>
             {
-                case Command.Login:
-                    ValidateLogin(message.Check, message.UserNumber, message.Message);
-                    break;
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.DataContext == this)
+                    {
+                        window.Close();
+                    }
+                }
+            });
+        }
+
+        public ICommand LoginCommand
+        {
+            get { return new RelayCommand<PasswordBox>(ExcuteLogin); }
+        }
+
+        public void ExcuteLogin(PasswordBox passwordBox)
+        {
+            var pwdPassword = passwordBox as PasswordBox;
+            string password = pwdPassword.Password;
+
+            if (string.IsNullOrEmpty(ID))
+            {
+                MessageBox.Show("아이디를 입력하세요.", AppConst.AppName);
+            }
+            else if (string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("비밀번호를 입력하세요.", AppConst.AppName);
+            }
+            else
+            {
+                if (!Messanger.RequestLogin(ID, password))
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
             }
         }
     }

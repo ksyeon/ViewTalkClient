@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ViewTalkClient"
-        xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
+        
         mc:Ignorable="d"
         Title="View Talk" Height="500" Width="350">
     <Window.DataContext>
@@ -33,11 +33,19 @@
                 <RowDefinition Height="40*" />
             </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding Path=ID}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IDTextBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickLogin}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ID}" Style="{StaticResource IDTextBoxStyle}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=pwdPassword}" Key="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
 
-            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickLogin}" />
+            <PasswordBox Name="pwdPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}">
+                <PasswordBox.InputBindings>
+                    <KeyBinding Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=pwdPassword}" Key="Enter" />
+                </PasswordBox.InputBindings>
+            </PasswordBox>
 
-            <Button Content="Login" Grid.Row="2" Grid.Column="1" Style="{StaticResource LoginButtonStyle}" Command="{Binding Path=ClickLogin}" CommandParameter="{Binding ElementName=pwdPassword}" />
+            <Button Content="Login" Grid.Row="2" Grid.Column="1" Style="{StaticResource LoginButtonStyle}" Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=pwdPassword}" />
         </Grid>
     </Grid>
 </Window>

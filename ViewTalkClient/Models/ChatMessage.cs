@@ -14,9 +14,9 @@ namespace ViewTalkClient.Models
 
         public ChatMessage(bool isNotice, string nickname, string message)
         {
-            this.IsNotice = isNotice;
-            this.Nickname = nickname;
-            this.Message = message;
+            IsNotice = isNotice;
+            Nickname = nickname;
+            Message = message;
         }
     }
 }

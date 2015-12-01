@@ -17,27 +17,27 @@ namespace ViewTalkClient.Models
 
         public TcpMessage()
         {
-            this.Command = Command.Null;
-            this.Check = 0;
-            this.UserNumber = 0;
-            this.ChatNumber = 0;
-            this.Message = string.Empty;
-            this.PPT = new PPTData();
+            Command = Command.Null;
+            Check = 0;
+            UserNumber = 0;
+            ChatNumber = 0;
+            Message = string.Empty;
+            PPT = new PPTData();
         }
 
         public TcpMessage(byte[] byteData)
         {
-            this.Command = (Command)BitConverter.ToInt32(byteData, 0);
-            this.Check = BitConverter.ToInt32(byteData, 4);
-            this.UserNumber = BitConverter.ToInt32(byteData, 8);
-            this.ChatNumber = BitConverter.ToInt32(byteData, 12);
-            this.Message = string.Empty;
-            this.PPT = new PPTData();
+            Command = (Command)BitConverter.ToInt32(byteData, 0);
+            Check = BitConverter.ToInt32(byteData, 4);
+            UserNumber = BitConverter.ToInt32(byteData, 8);
+            ChatNumber = BitConverter.ToInt32(byteData, 12);
+            Message = string.Empty;
+            PPT = new PPTData();
 
             int messageLenth = BitConverter.ToInt32(byteData, 16);
             if (messageLenth > 0)
             {
-                this.Message = Encoding.Unicode.GetString(byteData, 20, messageLenth);
+                Message = Encoding.Unicode.GetString(byteData, 20, messageLenth);
             }
 
             // PPT

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,7 +18,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class SettingViewModel : ViewModelBase
     {
-        private MessangerClient messanger;
+        private MessangerClient Messanger { get; set; }
 
         private string _teacherNickname;
         public string TecherNickname
@@ -28,57 +27,9 @@ namespace ViewTalkClient.ViewModels
             set { _teacherNickname = value; RaisePropertyChanged("TecherNickName"); }
         }
 
-        public ICommand ClickCreateChatting
+        public SettingViewModel(IMessangerService messangerService)
         {
-            get { return new DelegateCommand(param => CommandCreateChatting()); }
-        }
-
-        public ICommand ClickJoinChatting
-        {
-            get { return new DelegateCommand(param =>  CommandJoinChatting()); }
-        }
-
-        public ICommand ClickLogout
-        {
-            get { return new DelegateCommand(param => CommandLogout()); }
-        }
-
-        public ICommand CloseCommand
-        {
-            get { return new RelayCommand(CloseWindow); }
-        }
-
-        public SettingViewModel(IMessangerService MessangerService)
-        {
-            this.messanger = MessangerService.GetMessanger();
-            messanger.ExecuteMessage = ResponseMessage;
-        }
-
-        public void CommandCreateChatting()
-        {
-            messanger.RequestCreateChatting();
-        }
-
-        public void CommandJoinChatting()
-        {
-            if(string.IsNullOrEmpty(TecherNickname))
-            {
-                MessageBox.Show("강사의 닉네임을 입력하세요.", AppConst.AppName);
-            }
-            else
-            {
-                messanger.RequestJoinChatting(TecherNickname);
-            }
-        }
-
-        public void CommandLogout()
-        {
-            messanger.RequestLogout();
-        }
-
-        public void CloseWindow()
-        {
-            messanger.RequestLogout();
+            Messanger = messangerService.GetMessanger(ResponseMessage);
         }
 
         public void ResponseMessage(TcpMessage message)
@@ -101,17 +52,10 @@ namespace ViewTalkClient.ViewModels
 
         private void CreateChatting()
         {
-            messanger.ChatNumber = messanger.User.Number;
-            messanger.User.IsTeacher = true;
+            Messanger.ChatNumber = Messanger.User.Number;
+            Messanger.User.IsTeacher = true;
 
-            App.Current.Dispatcher.InvokeAsync(() =>
-            {
-                ChattingWindow chattingWindow = new ChattingWindow();
-                chattingWindow.ShowDialog();
-
-                // Close();
-            });
-
+            ShowChattingWindow();
         }
 
         private void JoinChatting(int check, int chatNumber)
@@ -119,18 +63,9 @@ namespace ViewTalkClient.ViewModels
             switch (check)
             {
                 case 0:
-                    messanger.ChatNumber = chatNumber;
+                    Messanger.ChatNumber = chatNumber;
 
-                    App.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        ChattingWindow chattingWindow = new ChattingWindow();
-                        chattingWindow.ShowDialog();
-
-                        // Close();
-                    });
-
-                    TecherNickname = string.Empty;
-
+                    ShowChattingWindow();
                     break;
 
                 case 1:
@@ -143,12 +78,93 @@ namespace ViewTalkClient.ViewModels
                     MessageBox.Show("존재하지 않는 닉네임입니다.", AppConst.AppName);
                     break;
             }
-
         }
 
-        private void Logout()
+        public void Logout()
         {
-            // Close();
+            /*
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.Show();
+            });
+            */
+
+            CloseWindow();
+        }
+
+        public void ShowChattingWindow()
+        {
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                ChattingWindow chattingWindow = new ChattingWindow();
+                chattingWindow.Show();
+            });
+
+            CloseWindow();
+        }
+
+        public void CloseWindow()
+        {
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.DataContext == this)
+                    {
+                        window.Close();
+                    }
+                }
+            });
+        }
+
+        public ICommand CreateChattingCommand
+        {
+            get { return new RelayCommand(ExcuteCreateChatting); }
+        }
+
+        public ICommand JoinChattingCommand
+        {
+            get { return new RelayCommand(ExcuteJoinChatting); }
+        }
+
+        public ICommand LogoutCommand
+        {
+            get { return new RelayCommand(ExcuteLogout); }
+        }
+
+        public void ExcuteCreateChatting()
+        {
+            if (!Messanger.RequestCreateChatting())
+            {
+                MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                CloseWindow();
+            }
+        }
+
+        public void ExcuteJoinChatting()
+        {
+            if (string.IsNullOrEmpty(TecherNickname))
+            {
+                MessageBox.Show("강사의 닉네임을 입력하세요.", AppConst.AppName);
+            }
+            else
+            {
+                if (!Messanger.RequestJoinChatting(TecherNickname))
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
+            }
+        }
+
+        public void ExcuteLogout()
+        {
+            if (!Messanger.RequestLogout())
+            {
+                MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                CloseWindow();
+            }
         }
     }
 }

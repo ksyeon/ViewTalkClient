@@ -10,26 +10,26 @@ namespace ViewTalkClient.Modules
 {
     public class MessangerClient : TcpClient
     {
-        private const string ServerIP = "183.109.83.66";
+        private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
-        private JsonHelper json;
+        public Action<TcpMessage> ExecuteMessage { get; set; }
 
         public UserData User { get; set; }
         public int ChatNumber { get; set; }
 
-        public delegate void MessageDelegate(TcpMessage message);
-        public MessageDelegate ExecuteMessage { get; set; }        
-
         public MessangerClient() : base(ServerIP, ServerPort)
         {
-            this.json = new JsonHelper();
-            this.User = new UserData();
+            ExecuteMessage = null;
+
+            User = new UserData();
+            ChatNumber = 0;
         }
 
         public bool RequestLogin(string id, string password)
         {
             TcpMessage message = new TcpMessage();
+            JsonHelper json = new JsonHelper();
 
             message.Command = Command.Login;
             message.Message = json.SetLoginInfo(id, password);
@@ -37,28 +37,28 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public void RequestLogout()
+        public bool RequestLogout()
         {
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.Logout;
             message.UserNumber = User.Number;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
-        public void RequestCreateChatting()
+        public bool RequestCreateChatting()
         {
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.CreateChatting;
             message.UserNumber = User.Number;
 
-            SendMessage(message);
+            return SendMessage(message);
 
         }
 
-        public void RequestJoinChatting(string nickname)
+        public bool RequestJoinChatting(string nickname)
         {
             TcpMessage message = new TcpMessage();
 
@@ -66,11 +66,11 @@ namespace ViewTalkClient.Modules
             message.UserNumber = User.Number;
             message.Message = nickname;
 
-            SendMessage(message);
+            return SendMessage(message);
 
         }
 
-        public void RequestCloseChatting()
+        public bool RequestCloseChatting()
         {
             TcpMessage message = new TcpMessage();
 
@@ -78,10 +78,10 @@ namespace ViewTalkClient.Modules
             message.UserNumber = User.Number;
             message.ChatNumber = ChatNumber;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
-        public void RequestJoinUser()
+        public bool RequestJoinUser()
         {
             TcpMessage message = new TcpMessage();
 
@@ -89,10 +89,10 @@ namespace ViewTalkClient.Modules
             message.UserNumber = User.Number;
             message.ChatNumber = ChatNumber;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
-        public void RequestExistUser()
+        public bool RequestExistUser()
         {
             TcpMessage message = new TcpMessage();
 
@@ -100,10 +100,10 @@ namespace ViewTalkClient.Modules
             message.UserNumber = User.Number;
             message.ChatNumber = ChatNumber;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
-        public void RequestSendChat(string chatMessage)
+        public bool RequestSendChat(string chatMessage)
         {
             TcpMessage message = new TcpMessage();
 
@@ -112,11 +112,11 @@ namespace ViewTalkClient.Modules
             message.ChatNumber = ChatNumber;
             message.Message = chatMessage;
 
-            SendMessage(message);
+            return SendMessage(message);
 
         }
 
-        public void RequestSendPPT(PPTData ppt)
+        public bool RequestSendPPT(PPTData ppt)
         {
             TcpMessage message = new TcpMessage();
 
@@ -125,10 +125,10 @@ namespace ViewTalkClient.Modules
             message.ChatNumber = ChatNumber;
             message.PPT = ppt;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
-        public void RequestClosePPT()
+        public bool RequestClosePPT()
         {
             TcpMessage message = new TcpMessage();
 
@@ -136,7 +136,7 @@ namespace ViewTalkClient.Modules
             message.UserNumber = User.Number;
             message.ChatNumber = ChatNumber;
 
-            SendMessage(message);
+            return SendMessage(message);
         }
 
         public override void ResponseMessage(TcpMessage message)

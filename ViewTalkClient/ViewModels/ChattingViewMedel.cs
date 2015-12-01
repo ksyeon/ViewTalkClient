@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,18 +20,11 @@ namespace ViewTalkClient.ViewModels
 {
     public class ChattingViewModel : ViewModelBase
     {
-        private MessangerClient messanger;
+        private MessangerClient Messanger { get; set; }
 
         public ObservableCollection<UserData> Users { get; set; }
         public ObservableCollection<ChatMessage> UserChat { get; set; }
         public ObservableCollection<ChatMessage> TeacherChat { get; set; }
-
-        private PPTData _ppt;
-        public PPTData PPT
-        {
-            get { return _ppt; }
-            set { _ppt = value; RaisePropertyChanged("PPT"); }
-        }
 
         private string _chatMessage;
         public string ChatMessage
@@ -41,155 +33,40 @@ namespace ViewTalkClient.ViewModels
             set { _chatMessage = value; RaisePropertyChanged("ChatMessage"); }
         }
 
-        public ICommand ClickSendChat
+        private PPTData _ppt;
+        public PPTData PPT
         {
-            get { return new DelegateCommand(param => CommandSendChat()); }
-        }
+            get { return _ppt; }
+            set { _ppt = value; RaisePropertyChanged("PPT"); }
+        }        
 
-        public ICommand ClickOpenPPT
+        public ChattingViewModel(IMessangerService messangerService)
         {
-            get { return new DelegateCommand(param => CommandOpenPPT()); }
-        }
+            Messanger = messangerService.GetMessanger(ResponseMessage);
 
-        public ICommand ClickLeftPPT
-        {
-            get { return new DelegateCommand(param => CommandMovePPT(0)); }
-        }
+            Users = new ObservableCollection<UserData>();
+            UserChat = new ObservableCollection<ChatMessage>();
+            TeacherChat = new ObservableCollection<ChatMessage>();
 
-        public ICommand ClickRightPPT
-        {
-            get { return new DelegateCommand(param => CommandMovePPT(1)); }
-        }
-
-        public ICommand CloseCommand
-        {
-            get { return new RelayCommand(CloseWindow); }
-        }
-
-        public ChattingViewModel(IMessangerService MessangerService)
-        {
-            this.messanger = MessangerService.GetMessanger();
-            messanger.ExecuteMessage = ResponseMessage;
-
-            this.Users = new ObservableCollection<UserData>();
-            this.UserChat = new ObservableCollection<ChatMessage>();
-            this.TeacherChat = new ObservableCollection<ChatMessage>();
-
-            this.PPT = new PPTData();
-
-            this.ChatMessage = string.Empty;
+            PPT = new PPTData();
+            ChatMessage = string.Empty;
 
             InitializeChatting();
         }
 
-        public void CommandSendChat()
-        {
-            if (!string.IsNullOrEmpty(ChatMessage))
-            {
-                AddChatMessage(messanger.User.Number, ChatMessage);
-
-                messanger.RequestSendChat(ChatMessage);
-
-                ChatMessage = string.Empty;
-            }
-        }
-
-        public void CommandOpenPPT()
-        {
-            if (messanger.User.IsTeacher)
-            {
-                if(PPT.LastPage == 0)
-                {
-                    OpenFileDialog openFile = new OpenFileDialog();
-
-                    openFile.DefaultExt = "pptx";
-                    openFile.Filter = "PowerPoint 프레젠테이션 (*.pptx;*.ppt)|*.pptx;*.ppt";
-
-                    openFile.ShowDialog();
-
-                    if (openFile.FileName.Length > 0)
-                    {
-                        PowerPoint powerPoint = new PowerPoint();
-
-                        List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
-
-                        if(bytePPT.Count > 0)
-                        {
-                            PPT.OpenPPT(bytePPT);
-
-                            messanger.RequestSendPPT(PPT);
-                        }
-                        else
-                        {
-                            MessageBox.Show("PPT를 불러오는 데 실패했습니다.", AppConst.AppName);
-                        }
-                    }
-                }
-                else
-                {
-                    PPT.ResetPPT();
-
-                    messanger.RequestClosePPT();
-                }
-            }
-            else
-            {
-                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
-            }
-        }
-
-        public void CommandMovePPT(int direction)
-        {
-            if (messanger.User.IsTeacher)
-            {
-                switch (direction)
-                {
-                    case 0: // Left
-                        if (PPT.CurrentPage > 1)
-                        {
-                            PPT.CurrentPPT = PPT.BytePPT[(--PPT.CurrentPage) - 1];
-
-                            messanger.RequestSendPPT(PPT);
-                        }
-                        break;
-
-                    case 1: // Right
-                        if (PPT.CurrentPage < PPT.LastPage)
-                        {
-                            PPT.CurrentPPT = PPT.BytePPT[(++PPT.CurrentPage) - 1];
-
-                            messanger.RequestSendPPT(PPT);
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
-            }
-        }
-
         public void InitializeChatting()
         {
-            if (messanger.User.IsTeacher)
+            if (Messanger.User.IsTeacher)
             {
-                Users.Add(messanger.User);
+                Users.Add(Messanger.User);
             }
             else
             {
-                messanger.RequestJoinUser();
-            }
-        }
-
-        public void CloseWindow()
-        {
-            if (messanger.User.IsTeacher)
-            {
-                messanger.RequestCloseChatting();
-            }
-            else
-            {
-                messanger.RequestExistUser();
+                if (!Messanger.RequestJoinUser())
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
             }
         }
 
@@ -231,12 +108,12 @@ namespace ViewTalkClient.ViewModels
                     break;
             }
         }
+        
 
         private void CloseChatting()
         {
             MessageBox.Show("채팅방이 종료되었습니다.");
-
-            // Close();
+            CloseWindow();
         }
 
         private void UpdateChatting(int chatNumbet, string message, PPTData ppt)
@@ -256,7 +133,6 @@ namespace ViewTalkClient.ViewModels
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Add(user);
-
                 UserChat.Add(new ChatMessage(true, user.Nickname, notice));
             });
         }
@@ -270,10 +146,10 @@ namespace ViewTalkClient.ViewModels
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Remove(user);
-
                 UserChat.Add(new ChatMessage(true, user.Nickname, notice));
             });
         }
+
 
         private void AddChatMessage(int userNumber, string message)
         {
@@ -298,6 +174,173 @@ namespace ViewTalkClient.ViewModels
         private void ClosePPT()
         {
             PPT.ResetPPT();
+        }
+
+        public void CloseWindow()
+        {
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.DataContext == this)
+                    {
+                        window.Close();
+                    }
+                }
+            });
+        }
+
+        public ICommand SendChatCommand
+        {
+            get { return new RelayCommand(ExcuteSendChat); }
+        }
+
+        public ICommand OpenPPTCommand
+        {
+            get { return new RelayCommand(ExcuteOpenPPT); }
+        }
+
+        public ICommand MoveLeftPPTCommand
+        {
+            get { return new RelayCommand(ExcuteMoveLeftPPT); }
+        }
+
+        public ICommand MoveRightPPTCommand
+        {
+            get { return new RelayCommand(ExcuteMoveRightPPT); }
+        }
+
+        public ICommand CloseWindowCommand
+        {
+            get { return new RelayCommand(ExcuteCloseWindow); }
+        }
+
+        public void ExcuteSendChat()
+        {
+            if (!string.IsNullOrEmpty(ChatMessage))
+            {
+                AddChatMessage(Messanger.User.Number, ChatMessage);
+
+                if (!Messanger.RequestSendChat(ChatMessage))
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
+
+                ChatMessage = string.Empty;
+            }
+        }
+
+        public void ExcuteOpenPPT()
+        {
+            if (Messanger.User.IsTeacher)
+            {
+                if (PPT.LastPage == 0)
+                {
+                    OpenFileDialog openFile = new OpenFileDialog();
+
+                    openFile.DefaultExt = "pptx";
+                    openFile.Filter = "PowerPoint 프레젠테이션 (*.pptx;*.ppt)|*.pptx;*.ppt";
+
+                    openFile.ShowDialog();
+
+                    if (openFile.FileName.Length > 0)
+                    {
+                        PowerPoint powerPoint = new PowerPoint();
+
+                        List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
+
+                        if (bytePPT.Count > 0)
+                        {
+                            PPT.OpenPPT(bytePPT);
+
+                            if (!Messanger.RequestSendPPT(PPT))
+                            {
+                                MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                                CloseWindow();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("PPT를 불러오는 데 실패했습니다.", AppConst.AppName);
+                        }
+                    }
+                }
+                else
+                {
+                    PPT.ResetPPT();
+
+                    if (!Messanger.RequestClosePPT())
+                    {
+                        MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                        CloseWindow();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
+            }
+        }
+
+        public void ExcuteMoveLeftPPT()
+        {
+            if (Messanger.User.IsTeacher)
+            {
+                if (PPT.CurrentPage > 1)
+                {
+                    PPT.CurrentPPT = PPT.BytePPT[(--PPT.CurrentPage) - 1];
+
+                    if (!Messanger.RequestSendPPT(PPT))
+                    {
+                        MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                        CloseWindow();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
+            }
+        }
+
+        public void ExcuteMoveRightPPT()
+        {
+            if (Messanger.User.IsTeacher)
+            {
+                if (PPT.CurrentPage < PPT.LastPage)
+                {
+                    PPT.CurrentPPT = PPT.BytePPT[(++PPT.CurrentPage) - 1];
+
+                    if (!Messanger.RequestSendPPT(PPT))
+                    {
+                        MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                        CloseWindow();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
+            }
+        }
+
+        public void ExcuteCloseWindow()
+        {
+            if (Messanger.User.IsTeacher)
+            {
+                Messanger.RequestCloseChatting();
+            }
+            else
+            {
+                if (!Messanger.RequestExistUser())
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
+            }
+
+            CloseWindow();
         }
     }
 }

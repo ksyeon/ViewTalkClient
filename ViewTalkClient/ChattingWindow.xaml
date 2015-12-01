@@ -15,7 +15,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <command:EventToCommand Command="{Binding CloseCommand}" />
+            <command:EventToCommand Command="{Binding CloseWindowCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
@@ -53,15 +53,15 @@
                         <ColumnDefinition Width="15*" />
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0" Margin="15,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickOpenPPT}">
+                    <Button Grid.Column="0" Margin="15,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=OpenPPTCommand}">
                         <Image Source="/Resources/PPTLoad.png" />
                     </Button>
 
-                    <Button Grid.Column="2" Margin="15,3,0,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickLeftPPT}">
+                    <Button Grid.Column="2" Margin="15,3,0,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveLeftPPTCommand}">
                         <Image Source="/Resources/PPTLeft.png" />
                     </Button>
 
-                    <Button Grid.Column="3" Margin="0,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=ClickRightPPT}">
+                    <Button Grid.Column="3" Margin="0,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveRightPPTCommand}">
                         <Image Source="/Resources/PPTRight.png" />
                     </Button>
                 </Grid>
@@ -77,9 +77,10 @@
         <ListBox ItemsSource="{Binding Path=TeacherChat}" Grid.Row="1" Grid.RowSpan="2" Margin="10,0,10,10" Style="{StaticResource ChatListBoxStyle}" extendes:ListBoxAutoScroll.AutoScrollToEnd="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding Path=Message}" />
-                    </TextBlock>
+                    <Grid Margin="1,1,1,0">
+                        <Rectangle Margin="-2,-2,-2,-2" Style="{StaticResource TeacherChatRectangleStyle}" />
+                        <TextBlock Foreground="{StaticResource ApplicationColor}" Margin="10,0,10,0" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -88,16 +89,16 @@
         <ListBox ItemsSource="{Binding Path=UserChat}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,10,10" Style="{StaticResource ChatListBoxStyle}" extendes:ListBoxAutoScroll.AutoScrollToEnd="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="1,1,1,1">
+                    <Grid Margin="1,1,1,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30*" />
                             <ColumnDefinition Width="70*" />
                         </Grid.ColumnDefinitions>
 
-                        <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource UserChatRectangleStyle}" />
+                        <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Margin="-2,-2,-2,-2" Style="{StaticResource UserChatRectangleStyle}" />
 
-                        <TextBlock Grid.Column="0" Text="{Binding Path=Nickname}" TextAlignment="Center" />
-                        <TextBlock Grid.Column="1" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />
+                        <TextBlock Foreground="{StaticResource ApplicationColor}" Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Nickname}" TextAlignment="Center" />
+                        <TextBlock Foreground="{StaticResource ApplicationColor}" Grid.Column="1" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -109,9 +110,9 @@
                 <ColumnDefinition Width="25*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickSendChat}" />
+            <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding Path=SendChatCommand}" />
 
-            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButtonStyle}" Command="{Binding Path=ClickSendChat}">
+            <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButtonStyle}" Command="{Binding Path=SendChatCommand}">
                 <Image Source="/Resources/SendChat.png" Margin="10,10,10,10" />
             </Button>
         </Grid>

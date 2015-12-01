@@ -25,7 +25,7 @@ namespace ViewTalkClient.Modules
             this.serverIP = serverIP;
             this.serverPort = serverPort;
 
-            this.byteData = new byte[32768];
+            byteData = new byte[32768];
 
             ConnectSocket();
         }
@@ -66,7 +66,7 @@ namespace ViewTalkClient.Modules
 
         protected bool SendMessage(TcpMessage message)
         {
-            bool isSucess = false;
+            bool isConnected = false;
 
             try
             {
@@ -75,14 +75,14 @@ namespace ViewTalkClient.Modules
                 /* [3] Send */
                 clientSocket.BeginSend(byteMessage, 0, byteMessage.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 
-                isSucess = true;
+                isConnected = true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
-            return isSucess;
+            return isConnected;
         }
 
         private void OnSend(IAsyncResult ar)
