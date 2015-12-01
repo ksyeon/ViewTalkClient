@@ -14,24 +14,23 @@ namespace ViewTalkClient.Modules
 {
     public class PowerPoint
     {
-        private Application application;
-
         public PowerPoint()
         {
-            this.application = new Application();
+
         }
 
         public List<byte[]> ConvertPPT(string filePath)
         {
             List<byte[]> result = new List<byte[]>();
-
+            
             try
-            { 
-                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            {
+                Application application = new Application();
+                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
 
                 for (int i = 0; i < presentation.Slides.Count; i++)
                 {
-                    string imagePath = AppDomain.CurrentDomain.BaseDirectory + @"\PPT";
+                    string imagePath = AppDomain.CurrentDomain.BaseDirectory + @"\ViewTalk_PPT";
 
                     DirectoryInfo directoryInfo = new DirectoryInfo(imagePath);
                     if (directoryInfo.Exists == false)
@@ -67,10 +66,10 @@ namespace ViewTalkClient.Modules
             JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
             jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
 
-            using (MemoryStream memoryStreamms = new MemoryStream())
+            using (MemoryStream memoryStreamm = new MemoryStream())
             {
-                jpegBitmapEncoder.Save(memoryStreamms);
-                result = memoryStreamms.ToArray();
+                jpegBitmapEncoder.Save(memoryStreamm);
+                result = memoryStreamm.ToArray();
             }
 
             return result;
