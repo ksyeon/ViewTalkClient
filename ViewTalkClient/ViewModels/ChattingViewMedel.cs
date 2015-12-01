@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
@@ -60,6 +61,11 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandMovePPT(1)); }
         }
 
+        public ICommand CloseCommand
+        {
+            get { return new RelayCommand(CloseWindow); }
+        }
+
         public ChattingViewModel(IMessangerService MessangerService)
         {
             this.messanger = MessangerService.GetMessanger();
@@ -86,11 +92,6 @@ namespace ViewTalkClient.ViewModels
 
                 ChatMessage = string.Empty;
             }
-        }
-
-        public void CommandCloseChatting()
-        {
-            // Close();
         }
 
         public void CommandOpenPPT()
@@ -180,11 +181,24 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
+        public void CloseWindow()
+        {
+            if (messanger.User.IsTeacher)
+            {
+                messanger.RequestCloseChatting();
+            }
+            else
+            {
+                messanger.RequestExistUser();
+            }
+        }
+
         public void ResponseMessage(TcpMessage message)
         {
             switch (message.Command)
             {
                 case Command.CloseChatting:
+                    CloseChatting();
                     break;
 
                 case Command.JoinUser:
@@ -216,6 +230,13 @@ namespace ViewTalkClient.ViewModels
                     ClosePPT();
                     break;
             }
+        }
+
+        private void CloseChatting()
+        {
+            MessageBox.Show("채팅방이 종료되었습니다.");
+
+            // Close();
         }
 
         private void UpdateChatting(int chatNumbet, string message, PPTData ppt)

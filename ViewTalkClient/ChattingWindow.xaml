@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:local="clr-namespace:ViewTalkClient"
         xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
@@ -10,6 +12,12 @@
     <Window.DataContext>
         <Binding Path="Chatting" Source="{StaticResource ViewModelLocator}" />
     </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding CloseCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Grid Background="{StaticResource BackgroundColor}">
         <Grid.ColumnDefinitions>
@@ -80,22 +88,28 @@
         <ListBox ItemsSource="{Binding Path=UserChat}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,10,10,10" Style="{StaticResource ChatListBoxStyle}" extendes:ListBoxAutoScroll.AutoScrollToEnd="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding Path=Nickname}" />
-                        <Run Text=" | " />
-                        <Run Text="{Binding Path=Message}" />
-                    </TextBlock>
+                    <Grid Margin="1,1,1,1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*" />
+                            <ColumnDefinition Width="70*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource UserChatRectangleStyle}" />
+
+                        <TextBlock Grid.Column="0" Text="{Binding Path=Nickname}" TextAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="25*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickSendChat}" />
+            <TextBox Text="{Binding Path=ChatMessage}" Grid.Column="0" Grid.Row="0" Style="{StaticResource ChatTextBoxStyle}" extendes:TextBoxEnterKey.EnterKeyCommand="{Binding ClickSendChat}" />
 
             <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChatSendButtonStyle}" Command="{Binding Path=ClickSendChat}">
                 <Image Source="/Resources/SendChat.png" Margin="10,10,10,10" />

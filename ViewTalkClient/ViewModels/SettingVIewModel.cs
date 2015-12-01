@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
@@ -42,6 +43,11 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandLogout()); }
         }
 
+        public ICommand CloseCommand
+        {
+            get { return new RelayCommand(CloseWindow); }
+        }
+
         public SettingViewModel(IMessangerService MessangerService)
         {
             this.messanger = MessangerService.GetMessanger();
@@ -66,6 +72,11 @@ namespace ViewTalkClient.ViewModels
         }
 
         public void CommandLogout()
+        {
+            messanger.RequestLogout();
+        }
+
+        public void CloseWindow()
         {
             messanger.RequestLogout();
         }

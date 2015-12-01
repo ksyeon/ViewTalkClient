@@ -70,11 +70,33 @@ namespace ViewTalkClient.Modules
 
         }
 
+        public void RequestCloseChatting()
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.CloseChatting;
+            message.UserNumber = User.Number;
+            message.ChatNumber = ChatNumber;
+
+            SendMessage(message);
+        }
+
         public void RequestJoinUser()
         {
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.JoinUser;
+            message.UserNumber = User.Number;
+            message.ChatNumber = ChatNumber;
+
+            SendMessage(message);
+        }
+
+        public void RequestExistUser()
+        {
+            TcpMessage message = new TcpMessage();
+
+            message.Command = Command.ExitUser;
             message.UserNumber = User.Number;
             message.ChatNumber = ChatNumber;
 
