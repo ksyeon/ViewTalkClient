@@ -6,10 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-using ViewTalkClient.ViewModels;
-
 namespace ViewTalkClient
 {
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
     public partial class App : Application
     {
     }

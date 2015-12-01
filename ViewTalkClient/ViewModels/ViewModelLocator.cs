@@ -1,47 +1,68 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ViewTalkClient.Modules;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
+
+using ViewTalkClient.Services;
 
 namespace ViewTalkClient.ViewModels
 {
     public class ViewModelLocator
     {
-        private MessangerClient tcpClient;
-
         public ViewModelLocator()
         {
-            this.tcpClient = new MessangerClient();
+            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+
+            ////if (ViewModelBase.IsInDesignModeStatic)
+            ////{
+            ////    // Create design time view services and models
+            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
+            ////}
+            ////else
+            ////{
+            ////    // Create run time view services and models
+            ////    SimpleIoc.Default.Register<IDataService, DataService>();
+            ////}
+
+            SimpleIoc.Default.Register<IMessangerService, MessangerService>();
+
+            SimpleIoc.Default.Register<LoginViewModel>();
+            SimpleIoc.Default.Register<SettingViewModel>();
+            SimpleIoc.Default.Register<ChattingViewModel>();
         }
 
-        private LoginViewModel _loginViewModel;
-        public LoginViewModel LoginViewModel
+        public LoginViewModel Login
         {
             get
             {
-                return _loginViewModel ?? (_loginViewModel = new LoginViewModel(tcpClient));
+                return ServiceLocator.Current.GetInstance<LoginViewModel>();
             }
         }
 
-        private SettingViewModel _settingViewModel;
-        public SettingViewModel SettingViewModel
+        public SettingViewModel Setting
         {
             get
             {
-                return _settingViewModel ?? (_settingViewModel = new SettingViewModel(tcpClient));
+                return ServiceLocator.Current.GetInstance<SettingViewModel>();
             }
         }
 
-        private ChattingViewModel _chattingViewModel;
-        public ChattingViewModel ChattingViewModel
+        public ChattingViewModel Chatting
         {
             get
             {
-                return _chattingViewModel ?? (_chattingViewModel = new ChattingViewModel(tcpClient));
+                return ServiceLocator.Current.GetInstance<ChattingViewModel>();
             }
+        }
+
+        public static void Cleanup()
+        {
+            // TODO Clear the ViewModels
         }
     }
 }

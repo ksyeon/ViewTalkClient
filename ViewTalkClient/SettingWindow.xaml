@@ -7,9 +7,8 @@
         xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
         Title="View Talk" Height="500" Width="350">
-
     <Window.DataContext>
-        <Binding Path="SettingViewModel" Source="{StaticResource ViewModelLocator}" />
+        <Binding Path="Setting" Source="{StaticResource ViewModelLocator}" />
     </Window.DataContext>
 
     <Grid Background="{StaticResource BackgroundColor}">

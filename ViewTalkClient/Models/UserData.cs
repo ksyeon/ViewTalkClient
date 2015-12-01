@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 using System.ComponentModel;
 
+using GalaSoft.MvvmLight;
+
 namespace ViewTalkClient.Models
 {
-    public class UserData : INotifyPropertyChanged
+    public class UserData : ViewModelBase
     {
         public int Number { get; set; }
 
@@ -16,7 +18,7 @@ namespace ViewTalkClient.Models
         public string Nickname
         {
             get { return _nickname; }
-            set { _nickname = value; OnNotifyPropertyChanged("Nickname"); }
+            set { _nickname = value; RaisePropertyChanged("Nickname"); }
         }
 
         public bool IsTeacher { get; set; }
@@ -31,15 +33,6 @@ namespace ViewTalkClient.Models
             this.Number = number;
             this.Nickname = nickname;
             this.IsTeacher = IsTeacher;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnNotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

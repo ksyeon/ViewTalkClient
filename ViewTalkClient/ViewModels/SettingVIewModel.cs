@@ -8,20 +8,23 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
+using GalaSoft.MvvmLight;
+
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
+using ViewTalkClient.Services;
 
 namespace ViewTalkClient.ViewModels
 {
-    public class SettingViewModel : INotifyPropertyChanged
+    public class SettingViewModel : ViewModelBase
     {
-        private MessangerClient tcpClient;
+        private MessangerClient messanger;
 
         private string _teacherNickname;
         public string TecherNickname
         {
             get { return _teacherNickname; }
-            set { _teacherNickname = value; OnNotifyPropertyChanged("TecherNickName"); }
+            set { _teacherNickname = value; RaisePropertyChanged("TecherNickName"); }
         }
 
         public ICommand ClickCreateChatting
@@ -39,15 +42,15 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandLogout()); }
         }
 
-        public SettingViewModel(MessangerClient tcpClient)
+        public SettingViewModel(IMessangerService MessangerService)
         {
-            this.tcpClient = tcpClient;
-            tcpClient.ExecuteMessage = ResponseMessage;
+            this.messanger = MessangerService.GetMessanger();
+            messanger.ExecuteMessage = ResponseMessage;
         }
 
         public void CommandCreateChatting()
         {
-            tcpClient.RequestCreateChatting();
+            messanger.RequestCreateChatting();
         }
 
         public void CommandJoinChatting()
@@ -58,13 +61,13 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                tcpClient.RequestJoinChatting(TecherNickname);
+                messanger.RequestJoinChatting(TecherNickname);
             }
         }
 
         public void CommandLogout()
         {
-            tcpClient.RequestLogout();
+            messanger.RequestLogout();
         }
 
         public void ResponseMessage(TcpMessage message)
@@ -87,8 +90,8 @@ namespace ViewTalkClient.ViewModels
 
         private void CreateChatting()
         {
-            tcpClient.ChatNumber = tcpClient.User.Number;
-            tcpClient.User.IsTeacher = true;
+            messanger.ChatNumber = messanger.User.Number;
+            messanger.User.IsTeacher = true;
 
             App.Current.Dispatcher.InvokeAsync(() =>
             {
@@ -105,7 +108,7 @@ namespace ViewTalkClient.ViewModels
             switch (check)
             {
                 case 0:
-                    tcpClient.ChatNumber = chatNumber;
+                    messanger.ChatNumber = chatNumber;
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
@@ -135,15 +138,6 @@ namespace ViewTalkClient.ViewModels
         private void Logout()
         {
             // Close();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnNotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

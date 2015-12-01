@@ -8,20 +8,23 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
+using GalaSoft.MvvmLight;
+
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
+using ViewTalkClient.Services;
 
 namespace ViewTalkClient.ViewModels
 {
-    public class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : ViewModelBase
     {
-        private MessangerClient tcpClient;
+        private MessangerClient messanger;
 
         private string _id;
         public string ID
         {
             get { return _id; }
-            set { _id = value; OnNotifyPropertyChanged("ID"); }
+            set { _id = value; RaisePropertyChanged("ID"); }
         }
 
         public ICommand ClickLogin
@@ -29,10 +32,10 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandLogin("1234")); }
         }
 
-        public LoginViewModel(MessangerClient tcpClient)
+        public LoginViewModel(IMessangerService MessangerService)
         {
-            this.tcpClient = tcpClient;
-            this.tcpClient.ExecuteMessage = ResponseMessage;
+            this.messanger = MessangerService.GetMessanger();
+            messanger.ExecuteMessage = ResponseMessage;
 
             this.ID = string.Empty;
         }
@@ -49,7 +52,7 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                bool isSuccess = tcpClient.RequestLogin(ID, password);
+                bool isSuccess = messanger.RequestLogin(ID, password);
 
                 if (!isSuccess)
                 {
@@ -65,8 +68,8 @@ namespace ViewTalkClient.ViewModels
             switch (check)
             {
                 case 0:
-                    tcpClient.User.Number = userNumber;
-                    tcpClient.User.Nickname = nickname;
+                    messanger.User.Number = userNumber;
+                    messanger.User.Nickname = nickname;
 
                     App.Current.Dispatcher.InvokeAsync(() =>
                     {
@@ -95,15 +98,6 @@ namespace ViewTalkClient.ViewModels
                 case Command.Login:
                     ValidateLogin(message.Check, message.UserNumber, message.Message);
                     break;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnNotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

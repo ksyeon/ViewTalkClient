@@ -4,21 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
-using Microsoft.Win32;
+using GalaSoft.MvvmLight;
 
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
+using ViewTalkClient.Services;
 
 namespace ViewTalkClient.ViewModels
 {
-    public class ChattingViewModel : INotifyPropertyChanged
+    public class ChattingViewModel : ViewModelBase
     {
-        private MessangerClient tcpClient;
+        private MessangerClient messanger;
 
         public ObservableCollection<UserData> Users { get; set; }
         public ObservableCollection<ChatMessage> UserChat { get; set; }
@@ -28,14 +30,14 @@ namespace ViewTalkClient.ViewModels
         public PPTData PPT
         {
             get { return _ppt; }
-            set { _ppt = value; OnNotifyPropertyChanged("PPT"); }
+            set { _ppt = value; RaisePropertyChanged("PPT"); }
         }
 
         private string _chatMessage;
         public string ChatMessage
         {
             get { return _chatMessage; }
-            set { _chatMessage = value; OnNotifyPropertyChanged("ChatMessage"); }
+            set { _chatMessage = value; RaisePropertyChanged("ChatMessage"); }
         }
 
         public ICommand ClickSendChat
@@ -58,10 +60,10 @@ namespace ViewTalkClient.ViewModels
             get { return new DelegateCommand(param => CommandMovePPT(1)); }
         }
 
-        public ChattingViewModel(MessangerClient tcpClient)
+        public ChattingViewModel(IMessangerService MessangerService)
         {
-            this.tcpClient = tcpClient;
-            tcpClient.ExecuteMessage = ResponseMessage;
+            this.messanger = MessangerService.GetMessanger();
+            messanger.ExecuteMessage = ResponseMessage;
 
             this.Users = new ObservableCollection<UserData>();
             this.UserChat = new ObservableCollection<ChatMessage>();
@@ -78,9 +80,9 @@ namespace ViewTalkClient.ViewModels
         {
             if (!string.IsNullOrEmpty(ChatMessage))
             {
-                AddChatMessage(tcpClient.User.Number, ChatMessage);
+                AddChatMessage(messanger.User.Number, ChatMessage);
 
-                tcpClient.RequestSendChat(ChatMessage);
+                messanger.RequestSendChat(ChatMessage);
 
                 ChatMessage = string.Empty;
             }
@@ -93,7 +95,7 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandOpenPPT()
         {
-            if (tcpClient.User.IsTeacher)
+            if (messanger.User.IsTeacher)
             {
                 if(PPT.LastPage == 0)
                 {
@@ -114,7 +116,7 @@ namespace ViewTalkClient.ViewModels
                         {
                             PPT.OpenPPT(bytePPT);
 
-                            tcpClient.RequestSendPPT(PPT);
+                            messanger.RequestSendPPT(PPT);
                         }
                         else
                         {
@@ -126,7 +128,7 @@ namespace ViewTalkClient.ViewModels
                 {
                     PPT.ResetPPT();
 
-                    tcpClient.RequestClosePPT();
+                    messanger.RequestClosePPT();
                 }
             }
             else
@@ -137,7 +139,7 @@ namespace ViewTalkClient.ViewModels
 
         public void CommandMovePPT(int direction)
         {
-            if (tcpClient.User.IsTeacher)
+            if (messanger.User.IsTeacher)
             {
                 switch (direction)
                 {
@@ -146,7 +148,7 @@ namespace ViewTalkClient.ViewModels
                         {
                             PPT.CurrentPPT = PPT.BytePPT[(--PPT.CurrentPage) - 1];
 
-                            tcpClient.RequestSendPPT(PPT);
+                            messanger.RequestSendPPT(PPT);
                         }
                         break;
 
@@ -155,7 +157,7 @@ namespace ViewTalkClient.ViewModels
                         {
                             PPT.CurrentPPT = PPT.BytePPT[(++PPT.CurrentPage) - 1];
 
-                            tcpClient.RequestSendPPT(PPT);
+                            messanger.RequestSendPPT(PPT);
                         }
                         break;
                 }
@@ -168,13 +170,13 @@ namespace ViewTalkClient.ViewModels
 
         public void InitializeChatting()
         {
-            if (tcpClient.User.IsTeacher)
+            if (messanger.User.IsTeacher)
             {
-                Users.Add(tcpClient.User);
+                Users.Add(messanger.User);
             }
             else
             {
-                tcpClient.RequestJoinUser();
+                messanger.RequestJoinUser();
             }
         }
 
@@ -275,15 +277,6 @@ namespace ViewTalkClient.ViewModels
         private void ClosePPT()
         {
             PPT.ResetPPT();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnNotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }
