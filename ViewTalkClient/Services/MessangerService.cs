@@ -20,7 +20,7 @@ namespace ViewTalkClient.Services
 
         public MessangerClient GetMessanger(Action<TcpMessage> execute)
         {
-            messanger.ExecuteMessage += execute;
+            messanger.ExcuteMessage += execute;
 
             return messanger;
         }

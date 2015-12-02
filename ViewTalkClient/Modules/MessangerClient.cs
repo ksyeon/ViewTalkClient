@@ -13,14 +13,14 @@ namespace ViewTalkClient.Modules
         private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
-        public Action<TcpMessage> ExecuteMessage { get; set; }
+        public Action<TcpMessage> ExcuteMessage { get; set; }
 
         public UserData User { get; set; }
         public int ChatNumber { get; set; }
 
         public MessangerClient() : base(ServerIP, ServerPort)
         {
-            ExecuteMessage = null;
+            ExcuteMessage = null;
 
             User = new UserData();
             ChatNumber = 0;
@@ -141,7 +141,10 @@ namespace ViewTalkClient.Modules
 
         public override void ResponseMessage(TcpMessage message)
         {
-            ExecuteMessage(message);
+            if (ExcuteMessage != null)
+            {
+                ExcuteMessage(message);
+            }
         }
     }
 }
