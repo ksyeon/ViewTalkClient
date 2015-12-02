@@ -20,7 +20,7 @@ namespace ViewTalkClient.ViewModels
 {
     public class ChattingViewModel : ViewModelBase
     {
-        private MessangerClient Messanger { get; set; }
+        public MessangerClient Messanger { get; set; }
 
         public ObservableCollection<UserData> Users { get; set; }
         public ObservableCollection<ChatMessage> UserChat { get; set; }
@@ -121,7 +121,16 @@ namespace ViewTalkClient.ViewModels
             JsonHelper json = new JsonHelper();
 
             List<UserData> userList = json.GetChattingInfo(chatNumbet, message);
-            Users = new ObservableCollection<UserData>(userList);
+            
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                Users.Clear();
+
+                foreach (UserData user in userList)
+                {
+                    Users.Add(user);
+                }
+            });
 
             LoadPPT(ppt);
         }
