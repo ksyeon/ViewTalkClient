@@ -13,14 +13,7 @@ namespace ViewTalkClient.Models
     public class UserData : ViewModelBase
     {
         public int Number { get; set; }
-
-        private string _nickname;
-        public string Nickname
-        {
-            get { return _nickname; }
-            set { _nickname = value; RaisePropertyChanged("Nickname"); }
-        }
-
+        public string Nickname { get; set; }
         public bool IsTeacher { get; set; }
 
         public UserData() : this(0, string.Empty, false)

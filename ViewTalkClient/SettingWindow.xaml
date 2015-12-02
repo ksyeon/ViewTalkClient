@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ViewTalkClient"
         xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
-        Title="View Talk" Height="500" Width="350">
+        Title="View Talk" Height="500" Width="350" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <Binding Path="Setting" Source="{StaticResource ViewModelLocator}" />
     </Window.DataContext>
