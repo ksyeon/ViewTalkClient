@@ -13,8 +13,6 @@ namespace ViewTalkClient.Services
     {
         private MessangerClient messanger;
 
-        public delegate void MessageDelegate(TcpMessage message);
-
         public MessangerService()
         {
             messanger = new MessangerClient();
@@ -22,7 +20,7 @@ namespace ViewTalkClient.Services
 
         public MessangerClient GetMessanger(Action<TcpMessage> execute)
         {
-            messanger.ExecuteMessage = execute;
+            messanger.ExecuteMessage += execute;
 
             return messanger;
         }
