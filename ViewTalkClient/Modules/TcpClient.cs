@@ -25,7 +25,7 @@ namespace ViewTalkClient.Modules
             this.serverIP = serverIP;
             this.serverPort = serverPort;
 
-            byteData = new byte[32768];
+            byteData = new byte[65000];
 
             ConnectSocket();
         }
