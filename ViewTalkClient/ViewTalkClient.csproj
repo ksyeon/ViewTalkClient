@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
@@ -79,6 +82,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppConst.cs" />
+    <Compile Include="Extenders\ButtonClickFocus.cs" />
+    <Compile Include="Extenders\ControlFocus.cs" />
     <Compile Include="Extenders\ListBoxAutoScroll.cs" />
     <Compile Include="Extenders\TextBoxEnterKey.cs" />
     <Compile Include="Models\ChatMessage.cs" />
@@ -88,7 +93,7 @@
     <Compile Include="Modules\JsonHelper.cs" />
     <Compile Include="Modules\JsonParser.cs" />
     <Compile Include="Modules\MessangerClient.cs" />
-    <Compile Include="Modules\PowerPoint.cs" />
+    <Compile Include="Modules\PPTManager.cs" />
     <Compile Include="Modules\TcpClient.cs" />
     <Compile Include="Services\IMessangerService.cs" />
     <Compile Include="Services\MessangerService.cs" />
@@ -194,6 +199,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

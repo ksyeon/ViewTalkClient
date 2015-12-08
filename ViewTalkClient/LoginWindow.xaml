@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ViewTalkClient" 
+        xmlns:local="clr-namespace:ViewTalkClient"
+        xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
-        Title="View Talk" Height="500" Width="350" WindowStartupLocation="CenterScreen">
+        Title="View Talk" Icon="/Resources/Icon.png" Height="500" Width="350" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <Binding Path="Login" Source="{StaticResource ViewModelLocator}" />
     </Window.DataContext>
@@ -32,7 +33,7 @@
                 <RowDefinition Height="40*" />
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ID}" Style="{StaticResource IDTextBoxStyle}">
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=ID, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource IDTextBoxStyle}" extendes:ControlFocus.IsFocused="True">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding Path=LoginCommand}" CommandParameter="{Binding ElementName=pwdPassword}" Key="Enter" />
                 </TextBox.InputBindings>

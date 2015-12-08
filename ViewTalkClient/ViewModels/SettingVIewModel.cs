@@ -64,7 +64,6 @@ namespace ViewTalkClient.ViewModels
             {
                 case 0:
                     Messanger.ChatNumber = chatNumber;
-
                     ShowChattingWindow();
                     break;
 

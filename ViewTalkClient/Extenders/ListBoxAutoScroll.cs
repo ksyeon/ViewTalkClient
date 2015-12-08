@@ -29,13 +29,14 @@ namespace ViewTalkClient.Extenders
         {
             var listBox = sender as ListBox;
             var listBoxItems = listBox.Items;
-            var data = listBoxItems.SourceCollection as INotifyCollectionChanged;
+            var source = listBoxItems.SourceCollection as INotifyCollectionChanged;
 
-            var scrollToEndHandler = new NotifyCollectionChangedEventHandler((sender1, e1) =>
+            var scrollToEndHandler = new NotifyCollectionChangedEventHandler((sender2, e2) =>
             {
                 if (listBox.Items.Count > 0)
                 {
                     object lastItem = listBox.Items[listBox.Items.Count - 1];
+
                     listBoxItems.MoveCurrentTo(lastItem);
                     listBox.ScrollIntoView(lastItem);
                 }
@@ -43,11 +44,11 @@ namespace ViewTalkClient.Extenders
 
             if ((bool)e.NewValue)
             {
-                data.CollectionChanged += scrollToEndHandler;
+                source.CollectionChanged += scrollToEndHandler;
             }
             else
             {
-                data.CollectionChanged -= scrollToEndHandler;
+                source.CollectionChanged -= scrollToEndHandler;
             }
         }
     }

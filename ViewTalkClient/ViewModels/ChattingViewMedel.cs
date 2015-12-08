@@ -204,6 +204,11 @@ namespace ViewTalkClient.ViewModels
             get { return new RelayCommand(ExcuteSendChat); }
         }
 
+        public ICommand WrapChatCommand
+        {
+            get { return new RelayCommand(ExcuteWrapChat); }
+        }
+
         public ICommand OpenPPTCommand
         {
             get { return new RelayCommand(ExcuteOpenPPT); }
@@ -240,6 +245,11 @@ namespace ViewTalkClient.ViewModels
             }
         }
 
+        public void ExcuteWrapChat()
+        {
+            ChatMessage += Environment.NewLine;
+        }
+
         public void ExcuteOpenPPT()
         {
             if (Messanger.User.IsTeacher)
@@ -255,7 +265,7 @@ namespace ViewTalkClient.ViewModels
 
                     if (openFile.FileName.Length > 0)
                     {
-                        PowerPoint powerPoint = new PowerPoint();
+                        PPTManager powerPoint = new PPTManager();
 
                         List<byte[]> bytePPT = powerPoint.ConvertPPT(openFile.FileName); // 비동기 처리 필요
 

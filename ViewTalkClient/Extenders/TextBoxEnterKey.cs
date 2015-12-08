@@ -31,11 +31,13 @@ namespace ViewTalkClient.Extenders
             ICommand command = (ICommand)e.NewValue;
             FrameworkElement fe = (FrameworkElement)target;
             Control control = (Control)target;
+
             control.KeyDown += (s, args) =>
             {
                 if (args.Key == Key.Enter)
                 {
                     BindingExpression b = control.GetBindingExpression(TextBox.TextProperty);
+
                     if (b != null)
                     {
                         b.UpdateSource();

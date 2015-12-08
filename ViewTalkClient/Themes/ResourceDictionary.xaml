@@ -36,7 +36,7 @@
         <Setter Property="Background" Value="{StaticResource ApplicationColor}" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundColor}" />
         <Setter Property="Width" Value="80" />
-        <Setter Property="Height" Value="35" />
+        <Setter Property="Height" Value="30" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Margin" Value="0,20,10,0"/>
         <Setter Property="FontSize" Value="16" />
@@ -63,6 +63,10 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible" />
     </Style>
 
+    <Style x:Key="ChatListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="IsEnabled" Value="False"/>
+    </Style>
+
     <Style x:Key="TeacherChatRectangleStyle" TargetType="Rectangle">
         <Setter Property="Fill" Value="{StaticResource TeacherColor}" />
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
@@ -87,6 +91,7 @@
         <Setter Property="Margin" Value="0,0,5,10"/>
         <Setter Property="MaxLength" Value="255" />
         <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="AcceptsReturn" Value="True" />
     </Style>
 
     <Style x:Key="ChatSendButtonStyle" TargetType="Button">

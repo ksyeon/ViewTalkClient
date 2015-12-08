@@ -12,9 +12,9 @@ using Microsoft.Office.Core;
 
 namespace ViewTalkClient.Modules
 {
-    public class PowerPoint
+    public class PPTManager
     {
-        public PowerPoint()
+        public PPTManager()
         {
 
         }
@@ -26,7 +26,7 @@ namespace ViewTalkClient.Modules
             try
             {
                 Application application = new Application();
-                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoFalse, MsoTriState.msoFalse, MsoTriState.msoFalse);
+                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
 
                 for (int i = 0; i < presentation.Slides.Count; i++)
                 {
@@ -43,7 +43,7 @@ namespace ViewTalkClient.Modules
                     //presentation.Slides[i + 1].Export(imagePath, "JPG", (int)presentation.Slides[i + 1].Master.Width, (int)presentation.Slides[i + 1].Master.Height);
                     presentation.Slides[i + 1].Export(imagePath, "JPG", 320, 240);
 
-                    result.Add(ImageToByte(imagePath));
+                    result.Add(ConvertImageToByte(imagePath));
                 }
 
                 presentation.Close();
@@ -57,11 +57,11 @@ namespace ViewTalkClient.Modules
             return result;
         }
 
-        public byte[] ImageToByte(string imagePath)
+        public byte[] ConvertImageToByte(string filePath)
         {
             byte[] result = new byte[0];
 
-            BitmapImage bitmapImage = new BitmapImage(new Uri(imagePath));
+            BitmapImage bitmapImage = new BitmapImage(new Uri(filePath));
 
             JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
             jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));

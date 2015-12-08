@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 using System.ComponentModel;
 
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+
 namespace ViewTalkClient.Models
 {
-    public class PPTData : INotifyPropertyChanged
+    public class PPTData : ViewModelBase
     {
         public List<byte[]> BytePPT { get; set; }
 
@@ -16,21 +19,21 @@ namespace ViewTalkClient.Models
         public byte[] CurrentPPT
         {
             get { return _currentPPT; }
-            set { _currentPPT = value; OnNotifyPropertyChanged("CurrentPPT"); }
+            set { _currentPPT = value; RaisePropertyChanged("CurrentPPT"); }
         }
 
         private int _currentPage;
         public int CurrentPage
         {
             get { return _currentPage; }
-            set { _currentPage = value; OnNotifyPropertyChanged("CurrentPage"); }
+            set { _currentPage = value; RaisePropertyChanged("CurrentPage"); }
         }
 
         private int _lastPage;
         public int LastPage
         {
             get { return _lastPage; }
-            set { _lastPage = value; OnNotifyPropertyChanged("LastPage"); }
+            set { _lastPage = value; RaisePropertyChanged("LastPage"); }
         }
 
         public PPTData()
@@ -60,15 +63,6 @@ namespace ViewTalkClient.Models
             CurrentPPT = new byte[0];
             CurrentPage = 0;
             LastPage = 0;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnNotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }
