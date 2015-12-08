@@ -23,11 +23,13 @@ namespace ViewTalkClient.Modules
         {
             List<byte[]> result = new List<byte[]>();
 
-            Application application = new Application();
-            Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+            
 
             try
             {
+                Application application = new Application();
+                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+
                 for (int i = 0; i < presentation.Slides.Count; i++)
                 {
                     string imagePath = AppDomain.CurrentDomain.BaseDirectory + @"\ViewTalk_PPT";
@@ -45,6 +47,9 @@ namespace ViewTalkClient.Modules
 
                     result.Add(ConvertImageToByte(imagePath));
                 }
+
+                presentation.Close();
+                application.Quit();
             }
             catch (Exception ex)
             {
@@ -53,9 +58,6 @@ namespace ViewTalkClient.Modules
 
             finally
             {
-                presentation.Close();
-                application.Quit();
-
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
