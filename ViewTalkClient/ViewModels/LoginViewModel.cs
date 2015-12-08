@@ -32,6 +32,8 @@ namespace ViewTalkClient.ViewModels
         {
             Messanger = messangerService.GetMessanger(ResponseMessage);
 
+            Messanger.User.Reset();
+
             ID = string.Empty;
         }
 

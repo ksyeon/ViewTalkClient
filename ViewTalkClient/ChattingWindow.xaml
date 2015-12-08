@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:local="clr-namespace:ViewTalkClient"
+        xmlns:viewmodel="clr-namespace:ViewTalkClient.ViewModels"
         xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
         mc:Ignorable="d"
         Title="View Talk" Icon="/Resources/Icon.png" Width="900" Height="600" WindowStartupLocation="CenterScreen">
@@ -48,8 +49,9 @@
             <Border Grid.Row="1" Margin="10,0,10,10" Style="{StaticResource ChattingBorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20*" />
-                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="40*" />
                         <ColumnDefinition Width="15*" />
                         <ColumnDefinition Width="15*" />
                     </Grid.ColumnDefinitions>
@@ -58,11 +60,15 @@
                         <Image Source="/Resources/PPTLoad.png" />
                     </Button>
 
-                    <Button Grid.Column="2" Margin="15,3,0,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveLeftPPTCommand}">
+                    <Button Grid.Column="1" Margin="15,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=OpenImageCommand}">
+                        <Image Source="/Resources/ImageLoad.png" />
+                    </Button>
+
+                    <Button Grid.Column="3" Margin="15,3,0,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveLeftPPTCommand}">
                         <Image Source="/Resources/PPTLeft.png" />
                     </Button>
 
-                    <Button Grid.Column="3" Margin="0,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveRightPPTCommand}">
+                    <Button Grid.Column="4" Margin="0,3,15,3" Style="{StaticResource PPTControlButtonStyle}" Command="{Binding Path=MoveRightPPTCommand}">
                         <Image Source="/Resources/PPTRight.png" />
                     </Button>
                 </Grid>
@@ -79,7 +85,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="1,1,1,0">
-                        <Rectangle Margin="-2,-2,-2,-2" Style="{StaticResource TeacherChatRectangleStyle}" />
+                        <Rectangle Fill="{Binding Path=Color}" Margin="-2,-2,-2,-2" Style="{StaticResource TeacherChatRectangleStyle}" />
                         <TextBlock Foreground="{StaticResource ApplicationColor}" Margin="10,0,10,0" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
@@ -96,7 +102,7 @@
                             <ColumnDefinition Width="70*" />
                         </Grid.ColumnDefinitions>
 
-                        <Rectangle Grid.Column="0" Grid.ColumnSpan="2" Margin="-2,-2,-2,-2" Style="{StaticResource UserChatRectangleStyle}" />
+                        <Rectangle Fill="{Binding Path=Color}"  Grid.Column="0" Grid.ColumnSpan="2" Margin="-2,-2,-2,-2" Style="{StaticResource UserChatRectangleStyle}" />
 
                         <TextBlock Foreground="{StaticResource ApplicationColor}" Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Nickname}" TextAlignment="Center" />
                         <TextBlock Foreground="{StaticResource ApplicationColor}" Grid.Column="1" Text="{Binding Path=Message}" TextAlignment="Left" TextWrapping="Wrap" />

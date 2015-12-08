@@ -4,10 +4,13 @@
     <!-- SolidColorBrush -->
     <SolidColorBrush x:Key="ApplicationColor" Color="#025E73" />
     <SolidColorBrush x:Key="BackgroundColor" Color="White" />
+    
+    <SolidColorBrush x:Key="NoticeColor" Color="Gold" />
     <SolidColorBrush x:Key="TeacherColor" Color="#4CEA9F3C"/>
-    <SolidColorBrush x:Key="UserColor" Color="#19025E73" />
+    <SolidColorBrush x:Key="StudentColor" Color="#19025E73" />
+    <SolidColorBrush x:Key="UserColor" Color="Ivory" />
 
-        <!-- Style -->
+    <!-- Style -->
     <Style x:Key="IDTextBoxStyle" TargetType="TextBox">
         <Setter Property="BorderBrush" Value="{StaticResource ApplicationColor}" />
         <Setter Property="BorderThickness" Value="2" />
@@ -68,7 +71,6 @@
     </Style>
 
     <Style x:Key="TeacherChatRectangleStyle" TargetType="Rectangle">
-        <Setter Property="Fill" Value="{StaticResource TeacherColor}" />
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="RadiusX" Value="3" />
@@ -76,7 +78,6 @@
     </Style>
 
     <Style x:Key="UserChatRectangleStyle" TargetType="Rectangle">
-        <Setter Property="Fill" Value="{StaticResource UserColor}" />
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="RadiusX" Value="3" />
@@ -110,7 +111,7 @@
     </Style>
 
     <Style x:Key="UserRectangleStyle" TargetType="Rectangle">
-        <Setter Property="Fill" Value="{StaticResource UserColor}" />
+        <Setter Property="Fill" Value="{StaticResource StudentColor}" />
         <Setter Property="Stroke" Value="{StaticResource ApplicationColor}" />
         <Setter Property="StrokeThickness" Value="2" />
         <Setter Property="RadiusX" Value="10" />

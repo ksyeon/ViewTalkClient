@@ -30,6 +30,8 @@ namespace ViewTalkClient.ViewModels
         public SettingViewModel(IMessangerService messangerService)
         {
             Messanger = messangerService.GetMessanger(ResponseMessage);
+
+            Messanger.ChatNumber = 0;
         }
 
         public void ResponseMessage(TcpMessage message)
@@ -134,7 +136,7 @@ namespace ViewTalkClient.ViewModels
 
         public void ExcuteCreateChatting()
         {
-            if (!Messanger.RequestCreateChatting())
+            if (!Messanger.RequestCreateChatting(Messanger.User.Number))
             {
                 MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                 CloseWindow();
@@ -149,7 +151,7 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                if (!Messanger.RequestJoinChatting(TecherNickname))
+                if (!Messanger.RequestJoinChatting(Messanger.User.Number, TecherNickname))
                 {
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();
@@ -159,7 +161,7 @@ namespace ViewTalkClient.ViewModels
 
         public void ExcuteLogout()
         {
-            if (!Messanger.RequestLogout())
+            if (!Messanger.RequestLogout(Messanger.User.Number))
             {
                 MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                 CloseWindow();

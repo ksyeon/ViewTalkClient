@@ -15,6 +15,7 @@ using GalaSoft.MvvmLight.Command;
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
 using ViewTalkClient.Services;
+using System.Windows.Media;
 
 namespace ViewTalkClient.ViewModels
 {
@@ -62,7 +63,7 @@ namespace ViewTalkClient.ViewModels
             }
             else
             {
-                if (!Messanger.RequestJoinUser())
+                if (!Messanger.RequestJoinUser(Messanger.User.Number, Messanger.ChatNumber))
                 {
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();
@@ -112,8 +113,15 @@ namespace ViewTalkClient.ViewModels
 
         private void CloseChatting()
         {
-            MessageBox.Show("채팅방이 종료되었습니다.", AppConst.AppName);
-            ExcuteCloseWindow();
+            App.Current.Dispatcher.InvokeAsync(() =>
+            {
+                SettingWindow settingWindow = new SettingWindow();
+                settingWindow.Show();
+
+                //MessageBox.Show("채팅방이 종료되었습니다.", AppConst.AppName);
+
+                CloseWindow();
+            });
         }
 
         private void UpdateChatting(int chatNumbet, string message, PPTData ppt)
@@ -142,7 +150,7 @@ namespace ViewTalkClient.ViewModels
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Add(user);
-                UserChat.Add(new ChatMessage(true, user.Nickname, notice));
+                UserChat.Add(new ChatMessage(ChatType.Notice, user.Nickname, notice));
             });
         }
 
@@ -155,7 +163,7 @@ namespace ViewTalkClient.ViewModels
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Remove(user);
-                UserChat.Add(new ChatMessage(true, user.Nickname, notice));
+                UserChat.Add(new ChatMessage(ChatType.Notice, user.Nickname, notice));
             });
         }
 
@@ -166,11 +174,22 @@ namespace ViewTalkClient.ViewModels
             {
                 UserData user = Users.First(x => (x.Number == userNumber)); // ArgumentNullException
 
-                UserChat.Add(new ChatMessage(false, user.Nickname, message));
+                if (Messanger.User.Number == userNumber)
+                {
+                    UserChat.Add(new ChatMessage(ChatType.User, user.Nickname, message));
+                }
+                else if (user.IsTeacher)
+                {
+                    TeacherChat.Add(new ChatMessage(ChatType.Teacher, user.Nickname, message));
+                }
+                else
+                {
+                    UserChat.Add(new ChatMessage(ChatType.Student, user.Nickname, message));
+                }
 
                 if (user.IsTeacher)
                 {
-                    TeacherChat.Add(new ChatMessage(false, user.Nickname, message));
+                    TeacherChat.Add(new ChatMessage(ChatType.Teacher, user.Nickname, message));
                 }
             });
         }
@@ -209,6 +228,11 @@ namespace ViewTalkClient.ViewModels
             get { return new RelayCommand(ExcuteOpenPPT); }
         }
 
+        public ICommand OpenImageCommand
+        {
+            get { return new RelayCommand(ExcuteOpenImage); }
+        }
+
         public ICommand MoveLeftPPTCommand
         {
             get { return new RelayCommand(ExcuteMoveLeftPPT); }
@@ -230,7 +254,7 @@ namespace ViewTalkClient.ViewModels
             {
                 AddChatMessage(Messanger.User.Number, ChatMessage);
 
-                if (!Messanger.RequestSendChat(ChatMessage))
+                if (!Messanger.RequestSendChat(Messanger.User.Number, Messanger.ChatNumber, ChatMessage))
                 {
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();
@@ -263,7 +287,7 @@ namespace ViewTalkClient.ViewModels
                         {
                             PPT.OpenPPT(bytePPT);
 
-                            if (!Messanger.RequestSendPPT(PPT))
+                            if (!Messanger.RequestSendPPT(Messanger.User.Number, Messanger.ChatNumber, PPT))
                             {
                                 MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                                 CloseWindow();
@@ -279,7 +303,62 @@ namespace ViewTalkClient.ViewModels
                 {
                     PPT.ResetPPT();
 
-                    if (!Messanger.RequestClosePPT())
+                    if (!Messanger.RequestClosePPT(Messanger.User.Number, Messanger.ChatNumber))
+                    {
+                        MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                        CloseWindow();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("강사만 사용할 수 있습니다.", AppConst.AppName);
+            }
+        }
+
+        public void ExcuteOpenImage()
+        {
+            if (Messanger.User.IsTeacher)
+            {
+                if (PPT.LastPage == 0)
+                {
+                    OpenFileDialog openFile = new OpenFileDialog();
+
+                    openFile.DefaultExt = "jpg";
+                    openFile.Filter = "그림 파일 (*.jpg;)|*.jpg;";
+
+                    openFile.ShowDialog();
+
+                    if (openFile.FileName.Length > 0)
+                    {
+                        PPTManager powerPoint = new PPTManager();
+
+                        byte[] byteImage = powerPoint.ConvertImageToByte(openFile.FileName); // 비동기 처리 필요
+
+                        List<byte[]> bytePPT = new List<byte[]>();
+                        bytePPT.Add(byteImage);
+
+                        if (bytePPT.Count > 0)
+                        {
+                            PPT.OpenPPT(bytePPT);
+
+                            if (!Messanger.RequestSendPPT(Messanger.User.Number, Messanger.ChatNumber, PPT))
+                            {
+                                MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                                CloseWindow();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Image를 불러오는 데 실패했습니다.", AppConst.AppName);
+                        }
+                    }
+                }
+                else
+                {
+                    PPT.ResetPPT();
+
+                    if (!Messanger.RequestClosePPT(Messanger.User.Number, Messanger.ChatNumber))
                     {
                         MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                         CloseWindow();
@@ -300,7 +379,7 @@ namespace ViewTalkClient.ViewModels
                 {
                     PPT.CurrentPPT = PPT.BytePPT[(--PPT.CurrentPage) - 1];
 
-                    if (!Messanger.RequestSendPPT(PPT))
+                    if (!Messanger.RequestSendPPT(Messanger.User.Number, Messanger.ChatNumber, PPT))
                     {
                         MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                         CloseWindow();
@@ -321,7 +400,7 @@ namespace ViewTalkClient.ViewModels
                 {
                     PPT.CurrentPPT = PPT.BytePPT[(++PPT.CurrentPage) - 1];
 
-                    if (!Messanger.RequestSendPPT(PPT))
+                    if (!Messanger.RequestSendPPT(Messanger.User.Number, Messanger.ChatNumber, PPT))
                     {
                         MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                         CloseWindow();
@@ -338,17 +417,17 @@ namespace ViewTalkClient.ViewModels
         {
             if (Messanger.User.IsTeacher)
             {
-                Messanger.ChatNumber = 0;
-
-                if (!Messanger.RequestCloseChatting())
+                if (!Messanger.RequestCloseChatting(Messanger.User.Number, Messanger.ChatNumber))
                 {
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();
                 }
+
+                Messanger.ChatNumber = 0;
             }
             else
             {
-                if (!Messanger.RequestExistUser())
+                if (!Messanger.RequestExistUser(Messanger.User.Number, Messanger.ChatNumber))
                 {
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();

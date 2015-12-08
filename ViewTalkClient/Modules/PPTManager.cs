@@ -53,7 +53,6 @@ namespace ViewTalkClient.Modules
             {
                 Console.WriteLine(ex.Message);
             }
-
             finally
             {
                 GC.Collect();
@@ -69,7 +68,13 @@ namespace ViewTalkClient.Modules
 
             try
             {
-                BitmapImage bitmapImage = new BitmapImage(new Uri(filePath));
+                BitmapImage bitmapImage = new BitmapImage();
+
+                bitmapImage.BeginInit();
+                bitmapImage.UriSource = new Uri(filePath);
+                bitmapImage.DecodePixelHeight = 240;
+                bitmapImage.DecodePixelWidth = 320;
+                bitmapImage.EndInit();
 
                 JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
                 jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));

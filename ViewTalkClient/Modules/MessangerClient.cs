@@ -37,7 +37,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestLogout()
+        public bool RequestLogout(int userNumbr)
         {
             TcpMessage message = new TcpMessage();
 
@@ -47,7 +47,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestCreateChatting()
+        public bool RequestCreateChatting(int userNumbr)
         {
             TcpMessage message = new TcpMessage();
 
@@ -58,7 +58,7 @@ namespace ViewTalkClient.Modules
 
         }
 
-        public bool RequestJoinChatting(string nickname)
+        public bool RequestJoinChatting(int userNumbr, string nickname)
         {
             TcpMessage message = new TcpMessage();
 
@@ -70,7 +70,7 @@ namespace ViewTalkClient.Modules
 
         }
 
-        public bool RequestCloseChatting()
+        public bool RequestCloseChatting(int userNumbr, int chatNumber)
         {
             TcpMessage message = new TcpMessage();
 
@@ -81,7 +81,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestJoinUser()
+        public bool RequestJoinUser(int userNumbr, int chatNumber)
         {
             TcpMessage message = new TcpMessage();
 
@@ -92,7 +92,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestExistUser()
+        public bool RequestExistUser(int userNumbr, int chatNumber)
         {
             TcpMessage message = new TcpMessage();
 
@@ -103,7 +103,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestSendChat(string chatMessage)
+        public bool RequestSendChat(int userNumbr, int chatNumber, string chatMessage)
         {
             TcpMessage message = new TcpMessage();
 
@@ -116,7 +116,7 @@ namespace ViewTalkClient.Modules
 
         }
 
-        public bool RequestSendPPT(PPTData ppt)
+        public bool RequestSendPPT(int userNumbr, int chatNumber, PPTData ppt)
         {
             TcpMessage message = new TcpMessage();
 
@@ -128,7 +128,7 @@ namespace ViewTalkClient.Modules
             return SendMessage(message);
         }
 
-        public bool RequestClosePPT()
+        public bool RequestClosePPT(int userNumbr, int chatNumber)
         {
             TcpMessage message = new TcpMessage();
 

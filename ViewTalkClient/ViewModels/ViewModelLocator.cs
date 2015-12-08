@@ -14,6 +14,13 @@ namespace ViewTalkClient.ViewModels
 {
     public class ViewModelLocator
     {
+        private static string _currentKey = System.Guid.NewGuid().ToString();
+        public static string CurrentKey
+        {
+            get { return _currentKey; }
+            private set { _currentKey = value; }
+        }
+
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
@@ -40,7 +47,7 @@ namespace ViewTalkClient.ViewModels
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<LoginViewModel>();
+                return ServiceLocator.Current.GetInstance<LoginViewModel>(Guid.NewGuid().ToString());
             }
         }
 
@@ -48,7 +55,7 @@ namespace ViewTalkClient.ViewModels
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<SettingViewModel>();
+                return ServiceLocator.Current.GetInstance<SettingViewModel>(Guid.NewGuid().ToString());
             }
         }
 
@@ -56,7 +63,7 @@ namespace ViewTalkClient.ViewModels
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<ChattingViewModel>();
+                return ServiceLocator.Current.GetInstance<ChattingViewModel>(Guid.NewGuid().ToString());
             }
         }
 
