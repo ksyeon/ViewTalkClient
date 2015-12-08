@@ -22,12 +22,12 @@ namespace ViewTalkClient.Modules
         public List<byte[]> ConvertPPT(string filePath)
         {
             List<byte[]> result = new List<byte[]>();
-            
+
+            Application application = new Application();
+            Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
+
             try
             {
-                Application application = new Application();
-                Presentation presentation = application.Presentations.Open(filePath, MsoTriState.msoCTrue, MsoTriState.msoFalse, MsoTriState.msoFalse);
-
                 for (int i = 0; i < presentation.Slides.Count; i++)
                 {
                     string imagePath = AppDomain.CurrentDomain.BaseDirectory + @"\ViewTalk_PPT";
@@ -45,13 +45,19 @@ namespace ViewTalkClient.Modules
 
                     result.Add(ConvertImageToByte(imagePath));
                 }
-
-                presentation.Close();
-                application.Quit();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+
+            finally
+            {
+                presentation.Close();
+                application.Quit();
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
 
             return result;
@@ -61,15 +67,24 @@ namespace ViewTalkClient.Modules
         {
             byte[] result = new byte[0];
 
-            BitmapImage bitmapImage = new BitmapImage(new Uri(filePath));
-
-            JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
-            jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-
-            using (MemoryStream memoryStreamm = new MemoryStream())
+            try
             {
-                jpegBitmapEncoder.Save(memoryStreamm);
-                result = memoryStreamm.ToArray();
+                BitmapImage bitmapImage = new BitmapImage(new Uri(filePath));
+
+                JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
+                jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+
+                using (MemoryStream memoryStreamm = new MemoryStream())
+                {
+                    jpegBitmapEncoder.Save(memoryStreamm);
+                    result = memoryStreamm.ToArray();
+
+                    memoryStreamm.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
             return result;
