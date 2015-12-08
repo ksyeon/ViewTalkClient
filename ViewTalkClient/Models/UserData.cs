@@ -27,5 +27,12 @@ namespace ViewTalkClient.Models
             Nickname = nickname;
             IsTeacher = IsTeacher;
         }
+
+        public void Reset()
+        {
+            Number = 0;
+            Nickname = string.Empty;
+            IsTeacher = false;
+        }
     }
 }

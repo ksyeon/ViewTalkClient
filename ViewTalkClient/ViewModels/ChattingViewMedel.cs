@@ -112,8 +112,8 @@ namespace ViewTalkClient.ViewModels
 
         private void CloseChatting()
         {
-            MessageBox.Show("채팅방이 종료되었습니다.");
-            CloseWindow();
+            MessageBox.Show("채팅방이 종료되었습니다.", AppConst.AppName);
+            ExcuteCloseWindow();
         }
 
         private void UpdateChatting(int chatNumbet, string message, PPTData ppt)
@@ -204,11 +204,6 @@ namespace ViewTalkClient.ViewModels
             get { return new RelayCommand(ExcuteSendChat); }
         }
 
-        public ICommand WrapChatCommand
-        {
-            get { return new RelayCommand(ExcuteWrapChat); }
-        }
-
         public ICommand OpenPPTCommand
         {
             get { return new RelayCommand(ExcuteOpenPPT); }
@@ -243,11 +238,6 @@ namespace ViewTalkClient.ViewModels
 
                 ChatMessage = string.Empty;
             }
-        }
-
-        public void ExcuteWrapChat()
-        {
-            ChatMessage += Environment.NewLine;
         }
 
         public void ExcuteOpenPPT()
@@ -348,7 +338,13 @@ namespace ViewTalkClient.ViewModels
         {
             if (Messanger.User.IsTeacher)
             {
-                Messanger.RequestCloseChatting();
+                Messanger.ChatNumber = 0;
+
+                if (!Messanger.RequestCloseChatting())
+                {
+                    MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
+                    CloseWindow();
+                }
             }
             else
             {
@@ -359,7 +355,8 @@ namespace ViewTalkClient.ViewModels
                 }
             }
 
-            CloseWindow();
+            SettingWindow settingWindow = new SettingWindow();
+            settingWindow.Show();
         }
     }
 }

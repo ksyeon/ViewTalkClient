@@ -23,8 +23,6 @@ namespace ViewTalkClient.Modules
         {
             List<byte[]> result = new List<byte[]>();
 
-            
-
             try
             {
                 Application application = new Application();

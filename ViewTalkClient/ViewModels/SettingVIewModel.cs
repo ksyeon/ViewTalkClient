@@ -81,13 +81,13 @@ namespace ViewTalkClient.ViewModels
 
         public void Logout()
         {
-            /*
+            Messanger.User.Reset();
+
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 LoginWindow loginWindow = new LoginWindow();
                 loginWindow.Show();
             });
-            */
 
             CloseWindow();
         }
