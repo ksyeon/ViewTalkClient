@@ -115,10 +115,7 @@ namespace ViewTalkClient.ViewModels
         {
             App.Current.Dispatcher.InvokeAsync(() =>
             {
-                SettingWindow settingWindow = new SettingWindow();
-                settingWindow.Show();
-
-                //MessageBox.Show("채팅방이 종료되었습니다.", AppConst.AppName);
+                MessageBox.Show("채팅방이 종료되었습니다.", AppConst.AppName); // 오류 수정해야 함 (Modal)
 
                 CloseWindow();
             });
@@ -180,7 +177,7 @@ namespace ViewTalkClient.ViewModels
                 }
                 else if (user.IsTeacher)
                 {
-                    TeacherChat.Add(new ChatMessage(ChatType.Teacher, user.Nickname, message));
+                    UserChat.Add(new ChatMessage(ChatType.Teacher, user.Nickname, message));
                 }
                 else
                 {
@@ -415,6 +412,15 @@ namespace ViewTalkClient.ViewModels
 
         public void ExcuteCloseWindow()
         {
+            /*
+            if (Messanger.ChatNumber != 0)
+            {
+                Messanger.ChatNumber = 0;
+
+                SettingWindow settingWindow = new SettingWindow();
+                settingWindow.Show();
+            }*/
+
             if (Messanger.User.IsTeacher)
             {
                 if (!Messanger.RequestCloseChatting(Messanger.User.Number, Messanger.ChatNumber))
@@ -422,8 +428,6 @@ namespace ViewTalkClient.ViewModels
                     MessageBox.Show("서버와의 연결이 끊겼습니다.", AppConst.AppName);
                     CloseWindow();
                 }
-
-                Messanger.ChatNumber = 0;
             }
             else
             {
@@ -434,8 +438,7 @@ namespace ViewTalkClient.ViewModels
                 }
             }
 
-            SettingWindow settingWindow = new SettingWindow();
-            settingWindow.Show();
+            // CloseWindow();
         }
     }
 }

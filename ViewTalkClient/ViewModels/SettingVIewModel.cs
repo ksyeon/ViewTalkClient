@@ -31,6 +31,7 @@ namespace ViewTalkClient.ViewModels
         {
             Messanger = messangerService.GetMessanger(ResponseMessage);
 
+            Messanger.User.IsTeacher = false;
             Messanger.ChatNumber = 0;
         }
 

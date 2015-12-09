@@ -42,7 +42,7 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.Logout;
-            message.UserNumber = User.Number;
+            message.UserNumber = userNumbr;
 
             return SendMessage(message);
         }
@@ -52,7 +52,7 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.CreateChatting;
-            message.UserNumber = User.Number;
+            message.UserNumber = userNumbr;
 
             return SendMessage(message);
 
@@ -63,7 +63,7 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.JoinChatting;
-            message.UserNumber = User.Number;
+            message.UserNumber = userNumbr;
             message.Message = nickname;
 
             return SendMessage(message);
@@ -75,8 +75,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.CloseChatting;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
 
             return SendMessage(message);
         }
@@ -86,8 +86,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.JoinUser;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
 
             return SendMessage(message);
         }
@@ -97,8 +97,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.ExitUser;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
 
             return SendMessage(message);
         }
@@ -108,8 +108,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.SendChat ;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
             message.Message = chatMessage;
 
             return SendMessage(message);
@@ -121,8 +121,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.SendPPT;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
             message.PPT = ppt;
 
             return SendMessage(message);
@@ -133,8 +133,8 @@ namespace ViewTalkClient.Modules
             TcpMessage message = new TcpMessage();
 
             message.Command = Command.ClosePPT;
-            message.UserNumber = User.Number;
-            message.ChatNumber = ChatNumber;
+            message.UserNumber = userNumbr;
+            message.ChatNumber = chatNumber;
 
             return SendMessage(message);
         }
