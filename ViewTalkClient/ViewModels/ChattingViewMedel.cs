@@ -15,7 +15,6 @@ using GalaSoft.MvvmLight.Command;
 using ViewTalkClient.Models;
 using ViewTalkClient.Modules;
 using ViewTalkClient.Services;
-using System.Windows.Media;
 
 namespace ViewTalkClient.ViewModels
 {
@@ -39,7 +38,7 @@ namespace ViewTalkClient.ViewModels
         {
             get { return _ppt; }
             set { _ppt = value; RaisePropertyChanged("PPT"); }
-        }        
+        }
 
         public ChattingViewModel(IMessangerService messangerService)
         {
@@ -109,7 +108,7 @@ namespace ViewTalkClient.ViewModels
                     break;
             }
         }
-        
+
 
         private void CloseChatting()
         {
@@ -126,7 +125,7 @@ namespace ViewTalkClient.ViewModels
             JsonHelper json = new JsonHelper();
 
             List<UserData> userList = json.GetChattingInfo(chatNumbet, message);
-            
+
             App.Current.Dispatcher.InvokeAsync(() =>
             {
                 Users.Clear();
@@ -419,7 +418,8 @@ namespace ViewTalkClient.ViewModels
 
                 SettingWindow settingWindow = new SettingWindow();
                 settingWindow.Show();
-            }*/
+            }
+            */
 
             if (Messanger.User.IsTeacher)
             {

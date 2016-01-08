@@ -10,7 +10,7 @@ namespace ViewTalkClient.Modules
 {
     public class MessangerClient : TcpClient
     {
-        private const string ServerIP = "183.109.83.66";
+        private const string ServerIP = "127.0.0.1";
         private const int ServerPort = 8080;
 
         public Action<TcpMessage> ExcuteMessage { get; set; }

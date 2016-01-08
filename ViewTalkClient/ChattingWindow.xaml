@@ -40,7 +40,7 @@
                 <RowDefinition Height="50*" />
             </Grid.RowDefinitions>
 
-            <Image Source="/Resources/PPT.jpg" Grid.Row="0" Margin="10,10,10,10" />
+            <Image Source="/Resources/PPTMain.png" Grid.Row="0" Margin="10,10,10,10" />
 
             <Border Background="Transparent" Grid.Row="0" Margin="10,10,10,10" Style="{StaticResource ChattingBorderStyle}">
                 <Image Source="{Binding Path=PPT.CurrentPPT}" />
