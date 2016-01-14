@@ -82,10 +82,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppConst.cs" />
-    <Compile Include="Extenders\ButtonClickFocus.cs" />
-    <Compile Include="Extenders\ControlFocus.cs" />
-    <Compile Include="Extenders\ListBoxAutoScroll.cs" />
-    <Compile Include="Extenders\TextBoxEnterKey.cs" />
+    <Compile Include="Extentions\ButtonClickFocus.cs" />
+    <Compile Include="Extentions\ControlFocus.cs" />
+    <Compile Include="Extentions\ListBoxAutoScroll.cs" />
+    <Compile Include="Extentions\TextBoxEnterKey.cs" />
     <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\PPTData.cs" />
     <Compile Include="Models\TcpMessage.cs" />

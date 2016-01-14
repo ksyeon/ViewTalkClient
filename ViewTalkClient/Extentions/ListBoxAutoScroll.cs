@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ViewTalkClient.Extenders
+namespace ViewTalkClient.Extentions
 {
     public class ListBoxAutoScroll : DependencyObject
     {

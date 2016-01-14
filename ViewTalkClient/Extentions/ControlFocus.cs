@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.Windows;
 
-namespace ViewTalkClient.Extenders
+namespace ViewTalkClient.Extentions
 {
     public class ControlFocus : DependencyObject
     {

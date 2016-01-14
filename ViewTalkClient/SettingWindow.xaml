@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ViewTalkClient"
-        xmlns:extendes="clr-namespace:ViewTalkClient.Extenders"
+        xmlns:extentions="clr-namespace:ViewTalkClient.Extentions"
         mc:Ignorable="d"
         Title="View Talk" Icon="/Resources/Icon.png" Height="500" Width="350" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -37,7 +37,7 @@
                 <ColumnDefinition Width="50*" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Text="{Binding Path=TecherNickname, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" FontSize="14" Style="{StaticResource IDTextBoxStyle}" extendes:ControlFocus.IsFocused="True">
+            <TextBox Text="{Binding Path=TecherNickname, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" FontSize="14" Style="{StaticResource IDTextBoxStyle}" extentions:ControlFocus.IsFocused="True">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding Path=JoinChattingCommand}" Key="Enter" />
                 </TextBox.InputBindings>

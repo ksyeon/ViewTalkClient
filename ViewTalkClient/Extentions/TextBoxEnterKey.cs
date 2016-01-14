@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace ViewTalkClient.Extenders
+namespace ViewTalkClient.Extentions
 {
     public class TextBoxEnterKey : DependencyObject
     {
